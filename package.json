@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && prisma migrate deploy",
     "migrate:deploy": "npx prisma migrate deploy",
     "migrate:dev": "npx prisma migrate dev",
     "db:push": "npx prisma db push",
