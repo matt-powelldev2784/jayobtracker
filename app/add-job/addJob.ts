@@ -1,6 +1,9 @@
 'use server'
 
 import { OpenAI } from 'openai'
+import { prisma } from '@/prisma/prisma'
+import type { Job } from '@prisma/client'
+import { redirect } from 'next/navigation'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -42,6 +45,7 @@ export const parseJobDetails = async (
     })
 
     const content = completion.choices[0].message.content
+    console.log('content', content)
     if (!content) throw new Error('No content from OpenAI')
 
     const data = JSON.parse(content)
@@ -49,7 +53,43 @@ export const parseJobDetails = async (
   } catch (error) {
     return {
       success: false,
-      error: String(error),
+      error: `Error. Please try to submit again. ${String(error)}`,
     }
   }
+}
+
+type JobInput = Omit<Job, 'id' | 'createdAt' | 'updatedAt' | 'coverLetter'>
+
+const addJobToDb = async (jobData: JobInput) => {
+  try {
+    const job = await prisma.job.create({
+      data: jobData,
+    })
+    return { success: true, job }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
+}
+
+export const processJobSubmission = async (
+  prevState: unknown,
+  formData: FormData
+) => {
+  // Parse job details
+  const parseResult = await parseJobDetails(prevState, formData)
+  if (!parseResult.success) {
+    return { success: false, error: parseResult.error }
+  }
+
+  // Add job to database
+  const addJobToDbResult = await addJobToDb(parseResult.data)
+  if (!addJobToDbResult.success) {
+    return { success: false, error: addJobToDbResult.error }
+  }
+
+  // On success, redirect to home page
+  redirect('/')
 }

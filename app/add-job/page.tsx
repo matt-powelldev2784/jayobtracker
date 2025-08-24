@@ -4,7 +4,7 @@ import { startTransition, useActionState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { parseJobDetails } from './actions/parseJobDetails'
+import { processJobSubmission } from './addJob'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -30,7 +30,10 @@ const schema = z.object({
 })
 
 const JobParseForm = () => {
-  const [state, formAction, pending] = useActionState(parseJobDetails, null)
+  const [state, formAction, pending] = useActionState(
+    processJobSubmission,
+    null
+  )
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
