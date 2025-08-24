@@ -6,6 +6,7 @@
   --foreground: #171717;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: #24B9C0;
   --font-sans: var(--font-roboto), Arial, Helvetica, sans-serif;
   --font-mono: 'Fira Mono', 'Menlo', 'Monaco', monospace;
 }
@@ -14,6 +15,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #24B9C0;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
   }
@@ -29,7 +31,6 @@ body {
    -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 
 /* Global styles */
 a {
@@ -58,4 +59,12 @@ a, button {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
 }

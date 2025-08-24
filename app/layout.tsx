@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+/* eslint-disable @next/next/no-img-element */
+import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
 
@@ -20,7 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>{children}</body>
+      <body className={`${roboto.variable} antialiased`}>
+        <nav className="bg-primary h-12 flexCol">
+          <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
+        </nav>
+        {children}
+      </body>
     </html>
   )
 }
