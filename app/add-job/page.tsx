@@ -1,49 +1,129 @@
 'use client'
 
-import { useActionState } from 'react'
+import { startTransition, useActionState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { parseJobDetails } from './actions/parseJobDetails'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  Form,
+} from '@/components/ui/form'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from '@/components/ui/card'
 
-export default function JobParseForm() {
+const schema = z.object({
+  text: z.string().min(100, 'Job description must be at least 100 characters'),
+  url: z.string().url('Please enter a valid URL'),
+})
+
+const JobParseForm = () => {
   const [state, formAction, pending] = useActionState(parseJobDetails, null)
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      text: '',
+      url: '',
+    },
+  })
+
+  const handleSubmit = (data: { text: string; url: string }) => {
+    const formData = new FormData()
+    formData.append('text', data.text)
+    formData.append('url', data.url)
+    startTransition(() => {
+      formAction(formData)
+    })
+  }
 
   return (
-    <form
-      action={formAction}
-      className="max-w-xl mx-auto p-4 flex flex-col gap-4"
-    >
-      <label>
-        Job Description:
-        <Textarea
-          name="text"
-          rows={10}
-          className="border p-2 w-full"
-          placeholder="Paste job description here"
-          required
-        />
-      </label>
-      <label>
-        Job URL:
-        <Input
-          name="url"
-          type="text"
-          className="border p-2 w-full"
-          placeholder="Paste job URL here"
-          required
-        />
-      </label>
-      <Button type="submit" disabled={pending}>
-        {pending ? 'Parsing...' : 'Parse Job'}
-      </Button>
+    <section className="px-4 w-full pb-20">
+      <Card className="max-w-5xl mx-auto mt-8">
+        <CardHeader>
+          <CardTitle>Add Job Details</CardTitle>
+        </CardHeader>
 
-      {state?.error && <div className="text-red-500 mt-2">{state.error}</div>}
+        <CardDescription className="px-6">
+          Paste a job description and URL to auto-fill the job details
+        </CardDescription>
 
-      <p className="mt-4">Preview </p>
-      <pre className="bg-gray-100 rounded min-h-36">
-        {JSON.stringify(state?.data, null, 2)}
-      </pre>
-    </form>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="flex flex-col"
+            >
+              <FormField
+                control={form.control}
+                name="text"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Job Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Paste job description here"
+                        rows={10}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Job URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Paste job URL here"
+                        type="url"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" disabled={pending}>
+                {pending
+                  ? 'Processing job details...'
+                  : 'Auto Fill Job Details'}
+              </Button>
+
+              {state?.error && (
+                <div className="text-red-500 mt-2">{state.error}</div>
+              )}
+            </form>
+          </Form>
+        </CardContent>
+
+        {/* Uncomment to preview returned job data for debugging */}
+        {/* <div className="px-8">
+          <p className="mt-4">Preview job data</p>
+          <pre className="bg-gray-100 rounded min-h-36 w-full">
+            {JSON.stringify(state?.data, null, 2)}
+          </pre>
+        </div> */}
+      </Card>
+    </section>
   )
 }
+
+export default JobParseForm
