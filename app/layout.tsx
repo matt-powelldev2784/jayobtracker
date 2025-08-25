@@ -2,6 +2,9 @@
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { PlusCircle } from 'lucide-react'
 
 const roboto = Roboto({
   variable: '--font-roboto',
@@ -22,11 +25,39 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable} antialiased`}>
-        <nav className="bg-primary h-12 flexCol">
-          <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
-        </nav>
+        <NavBar />
         {children}
       </body>
     </html>
   )
 }
+
+export const NavBar = () => (
+  <nav className="bg-primary h-12 flex items-center justify-between px-4">
+    {/* Logo (left) */}
+    <Link href="/" className="flex items-center gap-2 h-full">
+      <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
+    </Link>
+    {/* Add Job Button (right) */}
+    <div>
+      <Link href="/add-job">
+        <Button
+          variant="navigation"
+          className="hidden sm:inline-flex items-center gap-2"
+        >
+          <PlusCircle className="w-5 h-5" />
+          <span>Add Job</span>
+        </Button>
+
+        <Button
+          variant="navigation"
+          className="inline-flex sm:hidden items-center p-0"
+          aria-label="Add Job"
+          size="navigation"
+        >
+          <PlusCircle className="w-8 h-8" />
+        </Button>
+      </Link>
+    </div>
+  </nav>
+)
