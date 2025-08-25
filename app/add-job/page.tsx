@@ -23,6 +23,7 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card'
+import { FilePlus } from 'lucide-react'
 
 const schema = z.object({
   text: z.string().min(100, 'Job description must be at least 100 characters'),
@@ -55,7 +56,8 @@ const JobParseForm = () => {
     <section className="px-4 w-full pb-20">
       <Card className="max-w-5xl mx-auto mt-8">
         <CardHeader>
-          <CardTitle>Add Job Details</CardTitle>
+          <FilePlus className="w-10 h-10" />
+          <CardTitle>Auto Fill Job Details</CardTitle>
         </CardHeader>
 
         <CardDescription className="px-6">
