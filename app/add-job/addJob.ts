@@ -22,6 +22,8 @@ export const parseJobDetails = async (
     - url
     - description
 
+    The description should include all details from the job description.
+
     Return the result as a JSON object.
     The returned object must be valid JSON and parsable by JSON.parse()
 
@@ -40,12 +42,11 @@ export const parseJobDetails = async (
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 500,
+      max_tokens: 2000,
       temperature: 0.2,
     })
 
     const content = completion.choices[0].message.content
-    console.log('content', content)
     if (!content) throw new Error('No content from OpenAI')
 
     const data = JSON.parse(content)
