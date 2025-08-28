@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { PlusCircle } from 'lucide-react'
+import { ClerkProvider } from '@clerk/nextjs'
+import { NavigationBar } from '@/components/navbar/navigationBar'
 
 const roboto = Roboto({
   variable: '--font-roboto',
@@ -23,41 +21,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>
-        <NavBar />
-        {children}
-      </body>
-    </html>
+    <ClerkProvider signInUrl="/auth/sign-in" signUpUrl="/auth/sign-up">
+      <html lang="en">
+        <body className={`${roboto.variable} antialiased`}>
+          <NavigationBar />
+
+          <main className="flex flex-col items-center">{children}</main>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
-
-export const NavBar = () => (
-  <nav className="bg-primary h-12 flex items-center justify-between px-4">
-    {/* Logo (left) */}
-    <Link href="/" className="flex items-center gap-2 h-full">
-      <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
-    </Link>
-    {/* Add Job Button (right) */}
-    <div>
-      <Link href="/add-job">
-        <Button
-          variant="navigation"
-          className="hidden sm:inline-flex items-center gap-2"
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>Add Job</span>
-        </Button>
-
-        <Button
-          variant="navigation"
-          className="inline-flex sm:hidden items-center p-0"
-          aria-label="Add Job"
-          size="navigation"
-        >
-          <PlusCircle className="w-8 h-8" />
-        </Button>
-      </Link>
-    </div>
-  </nav>
-)
