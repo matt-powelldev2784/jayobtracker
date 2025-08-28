@@ -15,7 +15,16 @@ export const NavigationBar = async () => {
     <nav className="bg-primary h-12 flex items-center justify-between px-4 relative">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 h-full">
-        <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
+        <img
+          className="h-10 hidden md:block"
+          src="/jayob_logo_white.svg"
+          alt="Jayob Logo"
+        />
+        <img
+          className="h-10 md:hidden block"
+          src="/jayob_icon_grey.svg"
+          alt="Jayob Logo"
+        />
       </Link>
 
       <div className="flex flex-row items-center gap-4">
