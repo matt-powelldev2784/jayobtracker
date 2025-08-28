@@ -1,18 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { PlusCircle } from 'lucide-react'
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
+import { NavigationBar } from '@/components/navbar/navigationBar'
 
 const roboto = Roboto({
   variable: '--font-roboto',
@@ -31,57 +21,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider signInUrl="/auth/sign-in" signUpUrl="/auth/sign-up">
       <html lang="en">
         <body className={`${roboto.variable} antialiased`}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton>
-                <button className="bg-[#6c47ff] text-ceramic-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
+          <NavigationBar />
 
-          <NavBar />
-          {children}
+          <main className="flex flex-col items-center">{children}</main>
         </body>
       </html>
     </ClerkProvider>
   )
 }
-
-export const NavBar = () => (
-  <nav className="bg-primary h-12 flex items-center justify-between px-4">
-    {/* Logo (left) */}
-    <Link href="/" className="flex items-center gap-2 h-full">
-      <img className="h-10" src="/jayob_logo_white.svg" alt="Jayob Logo" />
-    </Link>
-    {/* Add Job Button (right) */}
-    <div>
-      <Link href="/add-job">
-        <Button
-          variant="navigation"
-          className="hidden sm:inline-flex items-center gap-2"
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>Add Job</span>
-        </Button>
-
-        <Button
-          variant="navigation"
-          className="inline-flex sm:hidden items-center p-0"
-          aria-label="Add Job"
-          size="navigation"
-        >
-          <PlusCircle className="w-8 h-8" />
-        </Button>
-      </Link>
-    </div>
-  </nav>
-)
