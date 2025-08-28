@@ -19,6 +19,7 @@
     "prisma:format": "npx prisma format"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.31.6",
     "@hookform/resolvers": "^5.2.1",
     "@prisma/client": "^6.14.0",
     "@radix-ui/react-label": "^2.1.7",
