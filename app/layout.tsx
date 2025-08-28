@@ -21,7 +21,15 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider signInUrl="/auth/sign-in" signUpUrl="/auth/sign-up">
+    <ClerkProvider
+      signInUrl="/auth/sign-in"
+      signUpUrl="/auth/sign-up"
+      appearance={{
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
+      }}
+    >
       <html lang="en">
         <head>
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
