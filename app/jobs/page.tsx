@@ -52,7 +52,7 @@ export default JobsPage;
 
 const MobileJobsList = ({ jobs }: JobListProps) => {
   return (
-    <div className="block sm:hidden">
+    <div className="block md:hidden">
       {/* Mobile Table Header */}
       <p className="flex justify-between items-center px-2 py-2 border-b bg-secondary font-bold text-white">Job List</p>
 
@@ -95,7 +95,7 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
 
 const DesktopJobsList = ({ jobs }: JobListProps) => {
   return (
-    <Table className="hidden sm:table">
+    <Table className="hidden md:table">
       <TableHeader>
         <TableRow>
           <TableHead className="w-1/3">Title</TableHead>
