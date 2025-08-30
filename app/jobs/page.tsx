@@ -18,11 +18,11 @@ type PaginationProps = {
 };
 
 const statusClass = {
-  applied: "bg-primary text-white",
+  applied: "bg-secondary text-white",
   rejected: "bg-destructive text-white",
-  interview: "bg-secondary text-white",
-  offer: "bg-secondary text-white",
-  new: "bg-secondary text-white",
+  interview: "bg-orange-500 text-white",
+  offer: "bg-orange-500 text-white",
+  new: "bg-green-500 text-white",
   default: "bg-secondary text-white",
 };
 

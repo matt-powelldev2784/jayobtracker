@@ -21,7 +21,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
-    <thead data-slot="table-header" className={cn("[&_tr]:border-b bg-secondary text-white", className)} {...props} />
+    <thead data-slot="table-header" className={cn("[&_tr]:border-b bg-primary text-white", className)} {...props} />
   );
 }
 
