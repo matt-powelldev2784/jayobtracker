@@ -1,6 +1,23 @@
 import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/prisma/prisma'
 import type { ApplicationStatus } from '@prisma/client'
+import type { Job } from '@prisma/client'
+
+export type GetJobsSuccess = {
+  success: true
+  data: {
+    jobs: Job[]
+    total: number
+    page: number
+    pageSize: number
+    totalPages: number
+  }
+}
+
+export type GetJobsError = {
+  success: false
+  error: string
+}
 
 export const getJobs = async ({
   status,
@@ -16,7 +33,7 @@ export const getJobs = async ({
     const PAGE_SIZE = 10
     const whereClause = status ? { userId, status } : { userId }
 
-    const jobs = await prisma.job.findMany({
+    const jobs: Job[] = await prisma.job.findMany({
       where: whereClause,
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * PAGE_SIZE,
@@ -34,14 +51,17 @@ export const getJobs = async ({
       totalPages: Math.ceil(total / PAGE_SIZE),
     }
 
-    return {
+    const response: GetJobsSuccess = {
       success: true,
       data,
     }
+
+    return response
   } catch (error) {
-    return {
+    const errorResponse: GetJobsError = {
       success: false,
       error: error instanceof Error ? error.message : String(error),
     }
+    return errorResponse
   }
 }
