@@ -72,10 +72,11 @@ const addJobToDb = async (jobData: JobInput) => {
     const job = await prisma.job.create({
       data: { ...jobData, userId },
     })
-    return { success: true, job }
+    return { success: true, data: job }
   } catch (error) {
     return {
       success: false,
+      data: null,
       error: error instanceof Error ? error.message : String(error),
     }
   }
