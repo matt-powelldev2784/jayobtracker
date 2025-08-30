@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import ErrorCard from "@/components/ui/errorCard";
 import { Job } from "@prisma/client";
+import { ChevronsUpDown } from "lucide-react";
 
 type JobsPageProps = {
   searchParams?: { page?: string };
@@ -98,10 +99,22 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
     <Table className="hidden md:table">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-1/3">Title</TableHead>
-          <TableHead className="w-1/3">Company</TableHead>
-          <TableHead className="w-1/6 ">Status</TableHead>
-          <TableHead className="w-1/6">Actions</TableHead>
+          <TableHead className="w-1/3">
+            Title
+            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          </TableHead>
+          <TableHead className="w-1/3">
+            Company
+            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          </TableHead>
+          <TableHead className="w-1/6 ">
+            Status
+            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          </TableHead>
+          <TableHead className="w-1/6">
+            Actions
+            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          </TableHead>
         </TableRow>
       </TableHeader>
 
