@@ -4,6 +4,7 @@ import { OpenAI } from 'openai'
 import { prisma } from '@/prisma/prisma'
 import type { Job } from '@prisma/client'
 import { redirect } from 'next/navigation'
+import { auth } from '@clerk/nextjs/server'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -63,8 +64,13 @@ type JobInput = Omit<Job, 'id' | 'createdAt' | 'updatedAt' | 'coverLetter'>
 
 const addJobToDb = async (jobData: JobInput) => {
   try {
+    const { userId } = await auth()
+    if (!userId) {
+      return { success: false, error: 'User not authenticated.' }
+    }
+
     const job = await prisma.job.create({
-      data: jobData,
+      data: { ...jobData, userId },
     })
     return { success: true, job }
   } catch (error) {
