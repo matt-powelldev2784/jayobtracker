@@ -26,15 +26,17 @@ export const getJobs = async ({
 
     const total = await prisma.job.count({ where: whereClause })
 
+    const data = {
+      jobs,
+      total,
+      page,
+      pageSize: PAGE_SIZE,
+      totalPages: Math.ceil(total / PAGE_SIZE),
+    }
+
     return {
       success: true,
-      data: {
-        jobs,
-        total,
-        page,
-        pageSize: PAGE_SIZE,
-        totalPages: Math.ceil(total / PAGE_SIZE),
-      },
+      data,
     }
   } catch (error) {
     return {
