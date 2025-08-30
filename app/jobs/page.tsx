@@ -1,6 +1,7 @@
 import { getJobs } from "./getJobs";
 import Link from "next/link";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
+import ErrorCard from "@/components/ui/errorCard";
 
 type SearchParams = {
   searchParams?: { page?: string };
@@ -17,13 +18,11 @@ const statusClass = {
 
 export default async function JobsPage({ searchParams }: SearchParams) {
   const page = searchParams?.page ? Number(searchParams.page) : 1;
-  const jobsResult = await getJobs({ page });
+  const jobsResponse = await getJobs({ page });
 
-  if (!jobsResult.success) {
-    return <div className="flex justify-center items-center h-32 text-destructive">{jobsResult.error}</div>;
-  }
+  if (!jobsResponse.success) return <ErrorCard message={jobsResponse.error} />;
 
-  const { jobs, totalPages } = jobsResult.data;
+  const { jobs, totalPages } = jobsResponse.data;
   const firstPage = page === 1;
   const lastPage = page === totalPages;
 

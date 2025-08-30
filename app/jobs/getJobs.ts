@@ -27,7 +27,7 @@ export const getJobs = async ({
   page?: number
 }) => {
   try {
-    const { userId } = await auth()
+    const { userId } = await auth();
     if (!userId) throw new Error('Not authenticated')
 
     const PAGE_SIZE = 10
