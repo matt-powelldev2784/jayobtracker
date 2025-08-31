@@ -23,65 +23,57 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card'
-import { PlusCircle } from 'lucide-react'
+import { Loader, PlusCircle } from "lucide-react";
 
 const schema = z.object({
-  text: z.string().min(100, 'Job description must be at least 100 characters'),
-  url: z.string().url('Please enter a valid URL'),
-})
+  text: z.string().min(100, "Job description must be at least 100 characters"),
+  url: z.string().url("Please enter a valid URL"),
+});
 
 const JobParseForm = () => {
-  const [state, formAction, pending] = useActionState(
-    processJobSubmission,
-    null
-  )
+  const [state, formAction, isLoading] = useActionState(processJobSubmission, null);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      text: '',
-      url: '',
+      text: "",
+      url: "",
     },
-  })
+  });
 
   const handleSubmit = (data: { text: string; url: string }) => {
-    const formData = new FormData()
-    formData.append('text', data.text)
-    formData.append('url', data.url)
+    const formData = new FormData();
+    formData.append("text", data.text);
+    formData.append("url", data.url);
     startTransition(() => {
-      formAction(formData)
-    })
-  }
+      formAction(formData);
+    });
+  };
 
   return (
-    <section className="px-4 w-full pb-20">
-      <Card className="max-w-5xl mx-auto mt-8">
+    <section className="w-full pb-20">
+      <Card className="max-w-xl mx-auto mt-8">
         <CardHeader>
-          <PlusCircle className="w-10 h-10" />
-          <CardTitle>Auto Fill Job Details</CardTitle>
-        </CardHeader>
+          <PlusCircle className="w-10 h-10 text-secondary" />
 
-        <CardDescription className="px-6">
-          Paste a job description and URL to auto-fill the job details
-        </CardDescription>
+          <CardTitle>Auto Fill Job Details</CardTitle>
+
+          <CardDescription className="mx-auto text-center">
+            Copy and paste a job advert and and URL to auto-fill the job details. This leverages AI to extract key
+            information from the job posting.
+          </CardDescription>
+        </CardHeader>
 
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="flex flex-col"
-            >
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col">
               <FormField
                 control={form.control}
                 name="text"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Job Description</FormLabel>
+                    <FormLabel>Job Advert</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Paste job description here"
-                        rows={10}
-                        {...field}
-                      />
+                      <Textarea placeholder="Paste job advert here" rows={10} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -95,26 +87,24 @@ const JobParseForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>Job URL</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Paste job URL here"
-                        type="url"
-                        {...field}
-                      />
+                      <Input placeholder="Paste job URL here" type="url" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button type="submit" disabled={pending}>
-                {pending
-                  ? 'Processing job details...'
-                  : 'Auto Fill Job Details'}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? <Loader className="animate-spin" /> : "Auto Fill Job Details"}
               </Button>
 
-              {state?.error && (
-                <div className="text-red-500 mt-2">{state.error}</div>
+              {isLoading && (
+                <CardDescription className="mx-auto">
+                  Processing your request. This may take a moment — please wait.
+                </CardDescription>
               )}
+
+              {state?.error && <div className="text-red-500 mt-2">{state.error}</div>}
             </form>
           </Form>
         </CardContent>
@@ -128,7 +118,7 @@ const JobParseForm = () => {
         </div> */}
       </Card>
     </section>
-  )
-}
+  );
+};
 
 export default JobParseForm

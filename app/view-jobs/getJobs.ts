@@ -1,0 +1,67 @@
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/prisma/prisma";
+import type { ApplicationStatus } from "@prisma/client";
+import type { Job } from "@prisma/client";
+
+export type GetJobsSuccess = {
+  success: true;
+  data: {
+    jobs: Job[];
+    recordCount: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+};
+
+export type GetJobsError = {
+  success: false;
+  error: string;
+};
+
+type GetJobsParams = {
+  status?: ApplicationStatus;
+  page?: number;
+  sortBy?: keyof Job;
+  sortOrder?: "asc" | "desc";
+};
+
+export const getJobs = async ({ status, page = 1, sortBy = "createdAt", sortOrder = "desc" }: GetJobsParams) => {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Not authenticated");
+
+    const PAGE_SIZE = 10;
+    const whereClause = status ? { userId, status } : { userId };
+
+    const jobs: Job[] = await prisma.job.findMany({
+      where: whereClause,
+      orderBy: { [sortBy]: sortOrder },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    });
+
+    const recordCount = await prisma.job.count({ where: whereClause });
+
+    const data = {
+      jobs,
+      recordCount,
+      page,
+      pageSize: PAGE_SIZE,
+      totalPages: Math.ceil(recordCount / PAGE_SIZE),
+    };
+
+    const response: GetJobsSuccess = {
+      success: true,
+      data,
+    };
+
+    return response;
+  } catch (error) {
+    const errorResponse: GetJobsError = {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+    return errorResponse;
+  }
+};

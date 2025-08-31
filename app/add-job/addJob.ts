@@ -99,5 +99,5 @@ export const processJobSubmission = async (
   }
 
   // On success, redirect to home page
-  redirect('/')
+  redirect("/view-jobs");
 }

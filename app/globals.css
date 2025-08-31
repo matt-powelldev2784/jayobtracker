@@ -117,6 +117,14 @@ a, button {
   color: var(--color-secondary) !important;
 }
 
+.bg-darkGrey {
+  background-color: var(--color-darkGrey) !important;
+}
+
+.text-darkGrey {
+  color: var(--color-darkGrey) !important;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

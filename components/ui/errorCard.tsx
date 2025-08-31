@@ -15,9 +15,10 @@ const ErrorCard = ({ message }: ErrorCardProps) => {
       </CardHeader>
 
       <CardDescription className="flex flex-col items-center gap-4 text-center">
-        <CardTitle className="text-center text-black">Please try again later</CardTitle>
-
         <div>
+          <CardTitle className="text-center text-black font-normal">
+            The application has encountered an Error. Please try again later.
+          </CardTitle>
           <p className="text-secondary">Error Message: {message}</p>
         </div>
 
