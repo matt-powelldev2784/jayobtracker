@@ -5,6 +5,7 @@ import ErrorCard from "@/components/ui/errorCard";
 import { Job } from "@prisma/client";
 import { ArrowRight, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
+import { jobStatusStyle } from "@/ts/jobStatusStyle";
 
 type JobsPageProps = {
   searchParams?: { page: string; sortBy: keyof Job; sortOrder: string };
@@ -23,15 +24,6 @@ type PaginationProps = {
   totalPages: number;
   sortedBy: keyof Job;
   sortOrder: string;
-};
-
-const statusClass = {
-  applied: "bg-secondary text-white",
-  rejected: "bg-destructive text-white",
-  interview: "bg-orange-500 text-white",
-  offer: "bg-orange-500 text-white",
-  new: "bg-green-500 text-white",
-  default: "bg-secondary text-white",
 };
 
 const JobsPage = async ({ searchParams }: JobsPageProps) => {
@@ -93,7 +85,7 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
             <TableCell>{job.company}</TableCell>
 
             <TableCell className="w-24">
-              <p className={`px-2 py-1 rounded text-xs w-20 text-center ${statusClass[job.status]}`}>{job.status}</p>
+              <p className={`px-2 py-1 rounded text-xs w-20 text-center ${jobStatusStyle[job.status]}`}>{job.status}</p>
             </TableCell>
           </TableRow>
         ))}
@@ -170,7 +162,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
             <TableCell> {new Date(job.createdAt).toLocaleDateString("en-GB")}</TableCell>
 
             <TableCell className="w-36">
-              <p className={`mx-auto px-2 py-1 rounded text-xs w-20 text-center ${statusClass[job.status]}`}>
+              <p className={`mx-auto px-2 py-1 rounded text-xs w-20 text-center ${jobStatusStyle[job.status]}`}>
                 {job.status}
               </p>
             </TableCell>
