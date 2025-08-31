@@ -83,7 +83,7 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
         {jobs.map((job) => (
           <TableRow key={job.id} className="hover:bg-muted transition">
             <TableCell>
-              <Link href={`/jobs/${job.id}/actions`} className="flexCol">
+              <Link href={`/job/${job.id}`} className="flexCol">
                 <div className="w-[25px] h-[25px] bg-primary rounded">
                   <ArrowRight strokeWidth={3} className="text-white p-1" />
                 </div>
@@ -156,7 +156,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
         {jobs.map((job) => (
           <TableRow key={job.id} className="hover:bg-muted transition">
             <TableCell className="w-16">
-              <Link href={`/jobs/${job.id}/actions`} className="w-full h-full flexCol">
+              <Link href={`/job/${job.id}`} className="flexCol">
                 <div className="w-[25px] h-[25px] bg-primary rounded">
                   <ArrowRight strokeWidth={3} className="text-white p-1" />
                 </div>

@@ -39,7 +39,6 @@ export const getJobs = async ({ status, page = 1, sortBy = "createdAt", sortOrde
       orderBy: { [sortBy]: sortOrder },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      include: { coverLetter: true },
     });
 
     const recordCount = await prisma.job.count({ where: whereClause });
