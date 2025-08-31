@@ -1,5 +1,7 @@
 import ErrorCard from "@/components/ui/errorCard";
 import { getJob } from "../getJob";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Button, LinkButton } from "@/components/ui/button";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -13,42 +15,61 @@ const JobDetailPage = async ({ params }: JobDetailPageProps) => {
   const { job, coverLetter } = response.data;
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-2">{job.title}</h1>
+    <section className="flex flex-col md:flex-row items-center md:items-start gap-0 w-screen min-h-screen">
+      <Card className="w-full md:min-h-screen md:w-[350px] pt-4 pb-4 md:min-w-[350px] gap-0 bg-neutral-100">
+        <CardHeader>
+          <CardTitle>{job.title}</CardTitle>
+          <CardDescription>{job.company}</CardDescription>
+        </CardHeader>
 
-      <p className="text-lg text-secondary mb-4">{job.company}</p>
+        <CardContent className="flexCol gap-4 bg-white border-2 border-darkGrey rounded-lg mx-4 md:mx-6 p-2 text-sm">
+          <div className="flexRow gap-2 mt-2">
+            <span className="font-bold">Status:</span>
+            <span className="px-2 py-1 rounded text-xs bg-secondary text-white">{job.status}</span>
+          </div>
+          <div className="mb-2">
+            <span className="font-bold">Location:</span> {job.location || "N/A"}
+          </div>
+          <div className="mb-2">
+            <span className="font-bold">Date Added:</span> {new Date(job.createdAt).toLocaleDateString("en-GB")}
+          </div>
+        </CardContent>
 
-      <div className="mb-2">
-        <span className="font-semibold">Status:</span>{" "}
-        <span className="px-2 py-1 rounded text-xs bg-secondary text-white">{job.status}</span>
-      </div>
-
-      <div className="mb-2">
-        <span className="font-semibold">Location:</span> {job.location || "N/A"}
-      </div>
-
-      <div className="mb-2">
-        <span className="font-semibold">Date Added:</span> {new Date(job.createdAt).toLocaleDateString("en-GB")}
-      </div>
-
-      {/* <div className="mb-2">
-        <span className="font-semibold">Description:</span>
-        <p className="mt-1">{job.description}</p>
-      </div> */}
-
-      {coverLetter && (
-        <div className="mb-2">
-          <span className="font-semibold">Cover Letter:</span>
-          <p className="mt-1">{coverLetter.content}</p>
+        <div className="w-full px-4 md:px-6 mb-2">
+          <LinkButton href={job.url} target="_blank" className="w-full mt-4">
+            Link to Job Posting
+          </LinkButton>
         </div>
-      )}
+      </Card>
 
-      <div className="mt-4">
-        <a href={job.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
-          Link to Job Posting
-        </a>
-      </div>
-    </div>
+      <Card className="w-full mt-3 min-h-screen px-0">
+        <CardHeader>
+          <CardTitle className="text-center">AI Generated Cover Letter Template</CardTitle>
+          <CardDescription className="text-center">
+            This AI-generated draft is designed to help you quickly craft a tailored cover letter.
+          </CardDescription>
+        </CardHeader>
+
+        {coverLetter && (
+          <div className="mb-2 border-2 border-darkGrey rounded-lg mx-4 md:mx-8 lg:mx-16 p-8 flexCol">
+            <span className="font-semibold">Cover Letter:</span>
+            <p className="mt-1">{coverLetter?.content}</p>
+          </div>
+        )}
+
+        {!coverLetter && (
+          <form className="mb-2 border-2 border-darkGrey rounded-lg mx-4 md:mx-8 lg:mx-16 p-8 flexCol">
+            <Button type="submit" className="">
+              Generate Cover Letter Template
+            </Button>
+
+            <CardDescription className="text-center mt-4">
+              Click the button above to generate cover letter template.
+            </CardDescription>
+          </form>
+        )}
+      </Card>
+    </section>
   );
 };
 
