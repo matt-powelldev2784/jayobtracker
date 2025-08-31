@@ -111,13 +111,18 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
             </div>
           </TableHead>
 
-          <TableHead className="w-4/12">
+          <TableHead className="3/12">
+            Company
+            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          </TableHead>
+
+          <TableHead className="w-3/12">
             Title
             <ChevronsUpDown className="w-4 h-4 ml-2" />
           </TableHead>
 
-          <TableHead className="4/12">
-            Company
+          <TableHead className="w-36">
+            Date Added
             <ChevronsUpDown className="w-4 h-4 ml-2" />
           </TableHead>
 
@@ -139,9 +144,11 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
               </Link>
             </TableCell>
 
+            <TableCell>{job.company}</TableCell>
+
             <TableCell>{job.title}</TableCell>
 
-            <TableCell>{job.company}</TableCell>
+            <TableCell> {new Date(job.createdAt).toLocaleDateString("en-GB")}</TableCell>
 
             <TableCell className="w-36">
               <p className={`mx-auto px-2 py-1 rounded text-xs w-20 text-center ${statusClass[job.status]}`}>
