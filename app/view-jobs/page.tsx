@@ -126,7 +126,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
             </Link>
           </TableHead>
 
-          <TableHead className="w-3/12">
+          <TableHead className="w-4/12">
             <Link href="/view-jobs?page=1&sortBy=title&sortOrder=asc" className="flex items-center">
               Title
               <ChevronsUpDown className="w-4 h-4 ml-2" />
