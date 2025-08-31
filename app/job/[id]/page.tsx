@@ -3,6 +3,7 @@ import { getJob } from "../getJob";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button, LinkButton } from "@/components/ui/button";
 import { CoverLetter, Job } from "@prisma/client";
+import { jobStatusStyle } from "@/ts/jobStatusStyle";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -50,7 +51,7 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
       <CardContent className="flexCol gap-4 bg-white border-2 border-darkGrey rounded-lg mx-4 md:mx-6 p-2 text-sm">
         <div className="flexRow gap-2 mt-2">
           <span className="font-bold">Status:</span>
-          <span className="px-2 py-1 rounded text-xs bg-secondary text-white">{job.status}</span>
+          <span className={`px-2 py-1 rounded text-xs ${jobStatusStyle[job.status]}`}>{job.status}</span>
         </div>
 
         <div className="mb-2">
