@@ -4,64 +4,58 @@ import type { ApplicationStatus } from '@prisma/client'
 import type { Job } from '@prisma/client'
 
 export type GetJobsSuccess = {
-  success: true
+  success: true;
   data: {
-    jobs: Job[]
-    total: number
-    page: number
-    pageSize: number
-    totalPages: number
-  }
-}
+    jobs: Job[];
+    recordCount: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+};
 
 export type GetJobsError = {
-  success: false
-  error: string
-}
+  success: false;
+  error: string;
+};
 
-export const getJobs = async ({
-  status,
-  page = 1,
-}: {
-  status?: ApplicationStatus
-  page?: number
-}) => {
+export const getJobs = async ({ status, page = 1 }: { status?: ApplicationStatus; page?: number }) => {
   try {
     const { userId } = await auth();
-    if (!userId) throw new Error('Not authenticated')
+    if (!userId) throw new Error("Not authenticated");
 
-    const PAGE_SIZE = 10
-    const whereClause = status ? { userId, status } : { userId }
+    const PAGE_SIZE = 10;
+    const whereClause = status ? { userId, status } : { userId };
 
     const jobs: Job[] = await prisma.job.findMany({
       where: whereClause,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
       include: { coverLetter: true },
-    })
+    });
 
-    const total = await prisma.job.count({ where: whereClause })
+    const recordCount = await prisma.job.count({ where: whereClause });
 
     const data = {
       jobs,
-      total,
+      recordCount,
       page,
       pageSize: PAGE_SIZE,
-      totalPages: Math.ceil(total / PAGE_SIZE),
-    }
+      totalPages: Math.ceil(recordCount / PAGE_SIZE),
+    };
 
     const response: GetJobsSuccess = {
       success: true,
       data,
-    }
+    };
 
-    return response
+    return response;
   } catch (error) {
     const errorResponse: GetJobsError = {
       success: false,
       error: error instanceof Error ? error.message : String(error),
-    }
-    return errorResponse
+    };
+    return errorResponse;
   }
-}
+};
