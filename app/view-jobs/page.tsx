@@ -3,22 +3,26 @@ import Link from "next/link";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import ErrorCard from "@/components/ui/errorCard";
 import { Job } from "@prisma/client";
-import { ArrowRight, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
+import { ArrowRight, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 
 type JobsPageProps = {
-  searchParams?: { page?: string };
+  searchParams?: { page: string; sortBy: keyof Job; sortOrder: string };
 };
 
 type JobListProps = {
   jobs: Job[];
   page: number;
   totalPages: number;
+  sortedBy: keyof Job;
+  sortOrder: string;
 };
 
 type PaginationProps = {
   page: number;
   totalPages: number;
+  sortedBy: keyof Job;
+  sortOrder: string;
 };
 
 const statusClass = {
@@ -32,22 +36,26 @@ const statusClass = {
 
 const JobsPage = async ({ searchParams }: JobsPageProps) => {
   const page = searchParams?.page ? Number(searchParams.page) : 1;
-  const jobsResponse = await getJobs({ page });
+  const sortedBy = searchParams?.sortBy ? searchParams.sortBy : "createdAt";
+  const sortOrder = searchParams?.sortOrder === "asc" ? "asc" : "desc";
+  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder });
 
   if (!jobsResponse.success) return <ErrorCard message={jobsResponse.error} />;
 
   const { jobs, totalPages } = jobsResponse.data;
+  const jobListProps = { jobs, page, totalPages, sortedBy, sortOrder };
+  const paginationProps = { page, totalPages, sortedBy, sortOrder };
 
   return (
     <div className="w-11/12 mt-8 flexCol">
       {/* Pagination Controls */}
-      <PaginationControls page={page} totalPages={totalPages} />
+      <PaginationControls {...paginationProps} />
 
       {/* Mobile view */}
-      <MobileJobsList jobs={jobs} page={page} totalPages={totalPages} />
+      <MobileJobsList {...jobListProps} />
 
       {/* Desktop view */}
-      <DesktopJobsList jobs={jobs} page={page} totalPages={totalPages} />
+      <DesktopJobsList {...jobListProps} />
     </div>
   );
 };
@@ -65,15 +73,9 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
             </div>
           </TableHead>
 
-          <TableHead className="w-full">
-            Company
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
-          </TableHead>
+          <TableHead className="w-full">Company</TableHead>
 
-          <TableHead className="w-24">
-            Status
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
-          </TableHead>
+          <TableHead className="w-24">Status</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -100,7 +102,9 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
   );
 };
 
-const DesktopJobsList = ({ jobs }: JobListProps) => {
+const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
+  const nextSortOrder = sortOrder === "asc" ? "desc" : "asc";
+
   return (
     <Table className="hidden md:table">
       <TableHeader>
@@ -112,18 +116,33 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
           </TableHead>
 
           <TableHead className="3/12">
-            Company
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
+            <Link
+              href={`/view-jobs?page=1&sortBy=company&sortOrder=${sortedBy === "company" ? nextSortOrder : "asc"}`}
+              className="flex items-center"
+            >
+              Company
+              <ChevronsUpDown className="w-4 h-4 ml-2" />
+              {sortedBy === "company" && <ArrowUpDown className="text-primary w-4 h-4 ml-2" />}
+            </Link>
           </TableHead>
 
           <TableHead className="w-3/12">
-            Title
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
+            <Link href="/view-jobs?page=1&sortBy=title&sortOrder=asc" className="flex items-center">
+              Title
+              <ChevronsUpDown className="w-4 h-4 ml-2" />
+              {sortedBy === "title" && <ArrowUpDown className="text-primary w-4 h-4 ml-2" />}
+            </Link>
           </TableHead>
 
-          <TableHead className="w-36">
-            Date Added
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
+          <TableHead className="w-40">
+            <Link
+              href={`/view-jobs?page=1&sortBy=createdAt&sortOrder=${sortedBy === "createdAt" ? nextSortOrder : "asc"}`}
+              className="flex items-center"
+            >
+              Date Added
+              <ChevronsUpDown className="`w-4 h-4 ml-2 text-inherit" />
+              {sortedBy === "createdAt" && <ArrowUpDown className="text-primary w-4 h-4 ml-2" />}
+            </Link>
           </TableHead>
 
           <TableHead className="w-36">
@@ -162,7 +181,7 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
   );
 };
 
-const PaginationControls = ({ page, totalPages }: PaginationProps) => {
+const PaginationControls = ({ page, totalPages, sortedBy, sortOrder }: PaginationProps) => {
   const firstPage = page === 1;
   const lastPage = page === totalPages;
 
@@ -172,7 +191,7 @@ const PaginationControls = ({ page, totalPages }: PaginationProps) => {
 
       <div className="flex justify-center items-center gap-4 ">
         <Link
-          href={`?page=${Math.max(1, page - 1)}`}
+          href={`?page=${Math.max(1, page - 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
           className={`w-8 h-8 rounded flexCol ${firstPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
         >
           <ChevronLeft className="text-white" />
@@ -181,7 +200,7 @@ const PaginationControls = ({ page, totalPages }: PaginationProps) => {
         <span className="text-sm text-secondary">{`Page ${page} of ${totalPages}`}</span>
 
         <Link
-          href={`?page=${Math.min(totalPages, page + 1)}`}
+          href={`?page=${Math.min(totalPages, page + 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
           className={`w-8 h-8 rounded flexCol ${lastPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
         >
           <ChevronRight className="text-white" />
@@ -190,4 +209,3 @@ const PaginationControls = ({ page, totalPages }: PaginationProps) => {
     </div>
   );
 };
-

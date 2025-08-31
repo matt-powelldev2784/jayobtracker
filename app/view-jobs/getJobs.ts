@@ -1,7 +1,7 @@
-import { auth } from '@clerk/nextjs/server'
-import { prisma } from '@/prisma/prisma'
-import type { ApplicationStatus } from '@prisma/client'
-import type { Job } from '@prisma/client'
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/prisma/prisma";
+import type { ApplicationStatus } from "@prisma/client";
+import type { Job } from "@prisma/client";
 
 export type GetJobsSuccess = {
   success: true;
@@ -19,7 +19,14 @@ export type GetJobsError = {
   error: string;
 };
 
-export const getJobs = async ({ status, page = 1 }: { status?: ApplicationStatus; page?: number }) => {
+type GetJobsParams = {
+  status?: ApplicationStatus;
+  page?: number;
+  sortBy?: keyof Job;
+  sortOrder?: "asc" | "desc";
+};
+
+export const getJobs = async ({ status, page = 1, sortBy = "createdAt", sortOrder = "desc" }: GetJobsParams) => {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Not authenticated");
@@ -29,7 +36,7 @@ export const getJobs = async ({ status, page = 1 }: { status?: ApplicationStatus
 
     const jobs: Job[] = await prisma.job.findMany({
       where: whereClause,
-      orderBy: { createdAt: "desc" },
+      orderBy: { [sortBy]: sortOrder },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
       include: { coverLetter: true },
