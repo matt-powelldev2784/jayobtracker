@@ -17,11 +17,11 @@ type CoverLetterCardProps = {
 };
 
 const JobDetailPage = async ({ params }: JobDetailPageProps) => {
-  const response = await getJob(Number(params.id));
+  const getJobData = await getJob(Number(params.id));
 
-  if (!response.success) return <ErrorCard message={response.error} />;
+  if (!getJobData.success) return <ErrorCard message={getJobData.error} />;
 
-  const { job, coverLetter } = response.data;
+  const { job, coverLetter } = getJobData.data;
 
   return (
     <section className="flex flex-col md:flex-row items-center md:items-start gap-0 w-screen min-h-screen">
