@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import ErrorCard from "@/components/ui/errorCard";
 import { Job } from "@prisma/client";
-import { ChevronsUpDown } from "lucide-react";
+import { ArrowRight, ChevronsUpDown } from "lucide-react";
 
 type JobsPageProps = {
   searchParams?: { page?: string };
@@ -99,20 +99,24 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
     <Table className="hidden md:table">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-1/3">
+          <TableHead className="w-16">
+            <div className="w-12-h-12 bg-secondary rounded mx-auto">
+              <ArrowRight strokeWidth={3} className="text-white p-1" />
+            </div>
+          </TableHead>
+
+          <TableHead className="w-4/12">
             Title
             <ChevronsUpDown className="w-4 h-4 ml-2" />
           </TableHead>
-          <TableHead className="w-1/3">
+
+          <TableHead className="4/12">
             Company
             <ChevronsUpDown className="w-4 h-4 ml-2" />
           </TableHead>
-          <TableHead className="w-1/6 ">
+
+          <TableHead className="w-36">
             Status
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
-          </TableHead>
-          <TableHead className="w-1/6">
-            Actions
             <ChevronsUpDown className="w-4 h-4 ml-2" />
           </TableHead>
         </TableRow>
@@ -121,32 +125,26 @@ const DesktopJobsList = ({ jobs }: JobListProps) => {
       <TableBody>
         {jobs.map((job) => (
           <TableRow key={job.id} className="hover:bg-muted transition">
+            <TableCell className="w-16">
+              <Link href={`/jobs/${job.id}/actions`} className="flex items-center justify-center w-full">
+                <div className="w-12-h-12 bg-primary rounded">
+                  <ArrowRight strokeWidth={3} className="text-white p-1" />
+                </div>
+              </Link>
+            </TableCell>
+
             <TableCell>{job.title}</TableCell>
 
             <TableCell>{job.company}</TableCell>
 
-            <TableCell>
-              <span className={`px-2 py-1 rounded text-xs ${statusClass[job.status] ?? statusClass["default"]}`}>
+            <TableCell className="w-36">
+              <span
+                className={`px-2 py-1 rounded text-xs w-24 text-center ${
+                  statusClass[job.status] ?? statusClass["default"]
+                }`}
+              >
                 {job.status}
               </span>
-            </TableCell>
-
-            <TableCell className="flex gap-2">
-              <Link
-                href={`/jobs/${job.id}`}
-                className="px-2 py-1 rounded bg-primary text-white hover:bg-primary/80 text-xs"
-              >
-                View
-              </Link>
-
-              <form action={`/jobs/${job.id}/delete`} method="post">
-                <button
-                  type="submit"
-                  className="px-2 py-1 rounded bg-destructive text-white hover:bg-destructive/80 text-xs"
-                >
-                  Delete
-                </button>
-              </form>
             </TableCell>
           </TableRow>
         ))}

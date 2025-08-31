@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div data-slot="table-container" className="relative w-full overflow-x-auto border border-darkGrey">
-      <table data-slot="table" className={cn("w-full caption-bottom text-sm", className)} {...props} />
+      <table data-slot="table" className={cn("w-full caption-bottom text-sm table-fixed", className)} {...props} />
     </div>
   );
 }
@@ -51,7 +51,7 @@ function TableHead({ className, children, ...props }: React.ComponentProps<"th">
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-2 py-4 text-left align-middle whitespace-nowrap text-darkGrey font-bold border-b border-darkGray first:border-l-0 border-l border-darkGray",
+        "h-10 px-2 py-4 text-left align-middle whitespace-nowrap text-darkGrey font-bold border-b border-darkGray first:border-l-0 border-l border-darkGray overflow-hidden text-ellipsis",
         className
       )}
       {...props}
@@ -66,7 +66,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "py-3 px-2 align-middle whitespace-nowrap border-b border-darkGrey first:border-l-0 border-l border-darkGrey",
+        "py-3 px-2 align-middle whitespace-nowrap border-b border-darkGrey first:border-l-0 border-l border-darkGrey overflow-hidden text-ellipsis",
         className
       )}
       {...props}
