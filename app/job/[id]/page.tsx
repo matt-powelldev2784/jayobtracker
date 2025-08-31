@@ -1,9 +1,10 @@
 import ErrorCard from "@/components/ui/errorCard";
 import { getJob } from "../getJob";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button, LinkButton } from "@/components/ui/button";
+import { LinkButton } from "@/components/ui/button";
 import { CoverLetter, Job } from "@prisma/client";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
+import GenerateCoverLetterButton from "../generateCoverLetterButton";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -15,6 +16,7 @@ type JobDetailsCardProps = {
 
 type CoverLetterCardProps = {
   coverLetter: CoverLetter | null;
+  jobId: number;
 };
 
 const JobDetailPage = async ({ params }: JobDetailPageProps) => {
@@ -27,7 +29,7 @@ const JobDetailPage = async ({ params }: JobDetailPageProps) => {
   return (
     <section className="flex flex-col md:flex-row items-center md:items-start gap-0 w-screen min-h-screen">
       <JobDetailsCard job={job} />
-      <CoverLetterCard coverLetter={coverLetter} />
+      <CoverLetterCard coverLetter={coverLetter} jobId={job.id} />
     </section>
   );
 };
@@ -66,7 +68,11 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
   );
 };
 
-const CoverLetterCard = ({ coverLetter }: CoverLetterCardProps) => {
+const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
+  console.log("coverLetter", coverLetter);
+
+  const coverLetterText = coverLetter ? formatCoverLetterText(coverLetter.content) : null;
+
   return (
     <Card className="w-full mt-3 min-h-screen px-0">
       <CardHeader>
@@ -79,22 +85,22 @@ const CoverLetterCard = ({ coverLetter }: CoverLetterCardProps) => {
       {coverLetter && (
         <div className="mb-2 border-2 border-darkGrey rounded-lg mx-4 md:mx-8 lg:mx-16 p-8 flexCol">
           <span className="font-semibold">Cover Letter:</span>
-          <p className="mt-1">{coverLetter.content}</p>
+          <p className="mt-1" dangerouslySetInnerHTML={{ __html: coverLetterText }} />
         </div>
       )}
 
-      {!coverLetter && (
-        <form className="mb-2 border-2 border-darkGrey rounded-lg mx-4 md:mx-8 lg:mx-16 p-8 flexCol">
-          <Button type="submit" className="">
-            Generate Cover Letter Template
-          </Button>
+      <div className="mb-2 border-2 border-darkGrey rounded-lg mx-4 md:mx-8 lg:mx-16 p-8 flexCol">
+        <GenerateCoverLetterButton jobId={jobId} />
 
-          <CardDescription className="text-center mt-4">
-            Click the button above to generate cover letter template.
-          </CardDescription>
-        </form>
-      )}
+        <CardDescription className="text-center mt-4">
+          {!coverLetter && <p>Click the button above to generate cover letter template</p>}
+          {coverLetter && <p>Click the button above to regenerate the cover letter template</p>}
+        </CardDescription>
+      </div>
     </Card>
   );
 };
 
+const formatCoverLetterText = (text: string) => {
+  return text.replace(/\n/g, "<br />");
+};
