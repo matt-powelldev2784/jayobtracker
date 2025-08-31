@@ -41,6 +41,12 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
         <CardDescription>{job.company}</CardDescription>
       </CardHeader>
 
+      <div className="w-full px-4 md:px-6 mt-2 mb-5 flexCol">
+        <LinkButton href={job.url} target="_blank">
+          View Job Advert
+        </LinkButton>
+      </div>
+
       <CardContent className="flexCol gap-4 bg-white border-2 border-darkGrey rounded-lg mx-4 md:mx-6 p-2 text-sm">
         <div className="flexRow gap-2 mt-2">
           <span className="font-bold">Status:</span>
@@ -55,12 +61,6 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
           <span className="font-bold">Date Added:</span> {new Date(job.createdAt).toLocaleDateString("en-GB")}
         </div>
       </CardContent>
-
-      <div className="w-full px-4 md:px-6 mb-2">
-        <LinkButton href={job.url} target="_blank" className="w-full mt-4">
-          Link to Job Posting
-        </LinkButton>
-      </div>
     </Card>
   );
 };
