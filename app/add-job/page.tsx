@@ -99,7 +99,7 @@ const JobParseForm = () => {
               </Button>
 
               {isLoading && (
-                <CardDescription className="mx-auto">
+                <CardDescription className="mx-auto text-center px-4">
                   Processing your request. This may take a moment — please wait.
                 </CardDescription>
               )}
