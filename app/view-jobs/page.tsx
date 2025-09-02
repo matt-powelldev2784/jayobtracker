@@ -109,7 +109,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 
           <TableHead className="3/12">
             <Link
-              href={`/view-jobs?page=1&sortBy=company&sortOrder=${sortedBy === "company" ? nextSortOrder : "asc"}`}
+              href={`/view-jobs?page=1&sortBy=company&sortOrder=${sortedBy === "company" ? nextSortOrder : "desc"}`}
               className="flex items-center"
             >
               Company
@@ -119,7 +119,10 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
           </TableHead>
 
           <TableHead className="w-4/12">
-            <Link href="/view-jobs?page=1&sortBy=title&sortOrder=asc" className="flex items-center">
+            <Link
+              href={`/view-jobs?page=1&sortBy=title&sortOrder=${sortedBy === "company" ? nextSortOrder : "desc"}`}
+              className="flex items-center"
+            >
               Job Title
               <ChevronsUpDown className="w-4 h-4 ml-2" />
               {sortedBy === "title" && <ArrowUpDown className="text-primary w-4 h-4 ml-2" />}
@@ -128,7 +131,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 
           <TableHead className="w-40">
             <Link
-              href={`/view-jobs?page=1&sortBy=createdAt&sortOrder=${sortedBy === "createdAt" ? nextSortOrder : "asc"}`}
+              href={`/view-jobs?page=1&sortBy=createdAt&sortOrder=${sortedBy === "createdAt" ? nextSortOrder : "desc"}`}
               className="flex items-center"
             >
               Date Added
