@@ -42,7 +42,7 @@ export const generateCoverLetter = async (jobId: number) => {
       where: { jobId: job.id },
     });
 
-    // save cover letter to database
+    // save cover letter to data
     const coverLetter = await prisma.coverLetter.create({
       data: {
         jobId: job.id,
@@ -54,7 +54,7 @@ export const generateCoverLetter = async (jobId: number) => {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: error instanceof Error ? "Unknown Error. Please try again later." : String(error),
     };
   }
 };
