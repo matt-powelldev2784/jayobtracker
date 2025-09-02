@@ -42,7 +42,7 @@ export const generateCoverLetter = async (jobId: number) => {
       where: { jobId: job.id },
     });
 
-    // save cover letter to data
+    // save cover letter to database
     const coverLetter = await prisma.coverLetter.create({
       data: {
         jobId: job.id,
