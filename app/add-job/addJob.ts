@@ -8,7 +8,7 @@ import { auth } from '@clerk/nextjs/server'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-export const parseJobDetails = async (prevState: unknown, formData: FormData) => {
+export const parseJobDetails = async (_: unknown, formData: FormData) => {
   const text = formData.get("text") as string;
   const url = formData.get("url") as string;
 
@@ -46,12 +46,11 @@ export const parseJobDetails = async (prevState: unknown, formData: FormData) =>
 
     const content = completion.choices[0].message.content;
     if (!content) throw new Error("No content from OpenAI.");
-    console.log("content", content);
 
     const data = JSON.parse(content);
     if (!data.title || !data.company || !data.description) {
       throw new Error(
-        "Unable to extract data. Please ensure the job description is valid and contains the title and company."
+        "Unable to extract data. Please ensure the job advert contains a title, company name, and description."
       );
     }
 
@@ -59,7 +58,7 @@ export const parseJobDetails = async (prevState: unknown, formData: FormData) =>
   } catch (error) {
     return {
       success: false,
-      error: `Error. ${String(error)} Please try to submit again.`,
+      error: `${String(error)} Please update details and resubmit.`,
     };
   }
 };

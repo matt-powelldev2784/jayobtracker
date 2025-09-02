@@ -87,7 +87,7 @@ const JobParseForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>Job URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="Paste job URL here" type="url" {...field} />
+                      <Input placeholder="Paste job URL here" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,7 +104,7 @@ const JobParseForm = () => {
                 </CardDescription>
               )}
 
-              {state?.error && <div className="text-red-500 mt-2">{state.error}</div>}
+              {state?.error && <div className="text-red-500 mt-2 text-center">{state.error}</div>}
             </form>
           </Form>
         </CardContent>
