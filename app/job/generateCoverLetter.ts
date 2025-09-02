@@ -54,7 +54,7 @@ export const generateCoverLetter = async (jobId: number) => {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: error instanceof Error ? "Unknown Error. Please try again later." : String(error),
     };
   }
 };
