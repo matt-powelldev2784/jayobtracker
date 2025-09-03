@@ -39,16 +39,16 @@ const JobsPage = async (props: JobsPageProps) => {
   const sortedBy = searchParams?.sortBy ? searchParams.sortBy : "createdAt";
   const sortOrder = searchParams?.sortOrder === "asc" ? "asc" : "desc";
   const statusFilter = searchParams?.statusFilter || undefined;
-  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder, status: statusFilter ?? undefined });
+  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder, status: statusFilter });
 
   if (!jobsResponse.success) return <ErrorCard message={jobsResponse.error} />;
 
   const { jobs, totalPages } = jobsResponse.data;
   const jobListProps = { jobs, page, totalPages, sortedBy, sortOrder };
-  const paginationProps = { page, totalPages, sortedBy, sortOrder, statusFilter };
+  const paginationProps = { page, totalPages, sortedBy, sortOrder, statusFilter: statusFilter };
 
   return (
-    <div className="w-11/12 mt-8 flexCol">
+    <div className="w-11/12 mt-4 flexCol">
       {/* Pagination Controls */}
       <PaginationControls {...paginationProps} />
 
@@ -190,27 +190,31 @@ const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilte
   const lastPage = page === totalPages;
 
   return (
-    <div className="flex justify-between items-center w-full mb-4">
-      <LinkButton href="/add-job">Add Job</LinkButton>
-
+    <div className="flex flex-col md:flex-row gap-4 justify-between items-end w-full mb-4">
       <JobsFilterSelect currentFilter={statusFilter} />
 
-      <div className="flex justify-center items-center gap-4 ">
-        <Link
-          href={`?page=${Math.max(1, page - 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
-          className={`w-8 h-8 rounded flexCol ${firstPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
-        >
-          <ChevronLeft className="text-white" />
-        </Link>
+      <div className="flex flex-row-reverse md:flex-row justify-between md:items-end md:justify-end gap-8 w-full">
+        <div className="flex justify-center items-center gap-4 ">
+          <Link
+            href={`?page=${Math.max(1, page - 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
+            className={`w-8 h-8 rounded flexCol ${firstPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
+          >
+            <ChevronLeft className="text-white" />
+          </Link>
 
-        <span className="text-sm text-secondary">{`Page ${page} of ${totalPages}`}</span>
+          <span className="text-sm text-secondary">{`Page ${page} of ${totalPages}`}</span>
 
-        <Link
-          href={`?page=${Math.min(totalPages, page + 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
-          className={`w-8 h-8 rounded flexCol ${lastPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
-        >
-          <ChevronRight className="text-white" />
-        </Link>
+          <Link
+            href={`?page=${Math.min(totalPages, page + 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
+            className={`w-8 h-8 rounded flexCol ${lastPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
+          >
+            <ChevronRight className="text-white" />
+          </Link>
+        </div>
+
+        <LinkButton href="/add-job" className="h-8">
+          Add Job
+        </LinkButton>
       </div>
     </div>
   );
