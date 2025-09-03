@@ -20,19 +20,27 @@ export type GetJobsError = {
 };
 
 type GetJobsParams = {
-  status?: ApplicationStatus | undefined;
-  page?: number;
-  sortBy?: keyof Job;
-  sortOrder?: "asc" | "desc";
+  statusFilter: ApplicationStatus | "All";
+  page: number;
+  sortBy: keyof Job;
+  sortOrder: "asc" | "desc";
 };
 
-export const getJobs = async ({ status, page = 1, sortBy = "createdAt", sortOrder = "desc" }: GetJobsParams) => {
+export const getJobs = async ({ page, sortBy, sortOrder, statusFilter }: GetJobsParams) => {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Not authenticated");
 
+    if (sortOrder !== "asc" && sortOrder !== "desc") {
+      throw new Error("Invalid sortOrder parameter provided");
+    }
+
+    if (!page || !sortBy || !sortOrder || !statusFilter) {
+      throw new Error("Missing required URL parameters");
+    }
+
     const PAGE_SIZE = 10;
-    const whereClause = status ? { userId, status } : { userId };
+    const whereClause = statusFilter === "All" ? { userId } : { userId, status: statusFilter };
 
     const jobs: Job[] = await prisma.job.findMany({
       where: whereClause,

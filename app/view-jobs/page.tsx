@@ -9,10 +9,10 @@ import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import JobsFilterSelect from "./jobFilterSelect";
 
 type JobsPageProps = {
-  searchParams?: Promise<{
+  searchParams: Promise<{
     page: string;
     sortBy: keyof Job;
-    sortOrder: string;
+    sortOrder: "asc" | "desc";
     statusFilter: ApplicationStatus;
   }>;
 };
@@ -23,29 +23,30 @@ type JobListProps = {
   totalPages: number;
   sortedBy: keyof Job;
   sortOrder: string;
+  statusFilter: ApplicationStatus | "All";
 };
 
 type PaginationProps = {
   page: number;
   totalPages: number;
   sortedBy: keyof Job;
-  sortOrder: string;
-  statusFilter: ApplicationStatus | undefined;
+  sortOrder: "asc" | "desc";
+  statusFilter: ApplicationStatus | "All";
 };
 
 const JobsPage = async (props: JobsPageProps) => {
   const searchParams = await props.searchParams;
-  const page = searchParams?.page ? Number(searchParams.page) : 1;
-  const sortedBy = searchParams?.sortBy ? searchParams.sortBy : "createdAt";
-  const sortOrder = searchParams?.sortOrder === "asc" ? "asc" : "desc";
-  const statusFilter = searchParams?.statusFilter || undefined;
-  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder, status: statusFilter });
+  const page = Number(searchParams?.page);
+  const sortedBy = searchParams?.sortBy;
+  const sortOrder = searchParams?.sortOrder;
+  const statusFilter = searchParams?.statusFilter;
+  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder, statusFilter });
 
   if (!jobsResponse.success) return <ErrorCard message={jobsResponse.error} />;
 
   const { jobs, totalPages } = jobsResponse.data;
-  const jobListProps = { jobs, page, totalPages, sortedBy, sortOrder };
-  const paginationProps = { page, totalPages, sortedBy, sortOrder, statusFilter: statusFilter };
+  const jobListProps = { jobs, page, totalPages, sortedBy, sortOrder, statusFilter };
+  const paginationProps = { page, totalPages, sortedBy, sortOrder, statusFilter };
 
   return (
     <div className="w-11/12 mt-4 flexCol">
@@ -103,7 +104,7 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
   );
 };
 
-const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
+const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListProps) => {
   const nextSortOrder = sortOrder === "asc" ? "desc" : "asc";
 
   return (
@@ -118,7 +119,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 
           <TableHead className="3/12">
             <Link
-              href={`/view-jobs?page=1&sortBy=company&sortOrder=${sortedBy === "company" ? nextSortOrder : "desc"}`}
+              href={`/view-jobs?page=1&sortBy=company&sortOrder=${nextSortOrder}&statusFilter=${statusFilter}`}
               className="flex items-center"
             >
               Company
@@ -129,7 +130,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 
           <TableHead className="w-4/12">
             <Link
-              href={`/view-jobs?page=1&sortBy=title&sortOrder=${sortedBy === "company" ? nextSortOrder : "desc"}`}
+              href={`/view-jobs?page=1&sortBy=title&sortOrder=${nextSortOrder}&statusFilter=${statusFilter}`}
               className="flex items-center"
             >
               Job Title
@@ -140,7 +141,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 
           <TableHead className="w-40">
             <Link
-              href={`/view-jobs?page=1&sortBy=createdAt&sortOrder=${sortedBy === "createdAt" ? nextSortOrder : "desc"}`}
+              href={`/view-jobs?page=1&sortBy=createdAt&sortOrder=${nextSortOrder}&statusFilter=${statusFilter}`}
               className="flex items-center"
             >
               Date Added
@@ -188,6 +189,8 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
 const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilter }: PaginationProps) => {
   const firstPage = page === 1;
   const lastPage = page === totalPages;
+  const prevPage = Math.max(1, page - 1);
+  const nextPage = Math.min(totalPages, page + 1);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-end w-full mb-4">
@@ -196,7 +199,7 @@ const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilte
       <div className="flex flex-row-reverse md:flex-row justify-between md:items-end md:justify-end gap-8 w-full">
         <div className="flex justify-center items-center gap-4 ">
           <Link
-            href={`?page=${Math.max(1, page - 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
+            href={`?page=${prevPage}&sortBy=${sortedBy}&sortOrder=${sortOrder}&statusFilter=${statusFilter}`}
             className={`w-8 h-8 rounded flexCol ${firstPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
           >
             <ChevronLeft className="text-white" />
@@ -205,7 +208,7 @@ const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilte
           <span className="text-sm text-secondary">{`Page ${page} of ${totalPages}`}</span>
 
           <Link
-            href={`?page=${Math.min(totalPages, page + 1)}&sortBy=${sortedBy}&sortOrder=${sortOrder}`}
+            href={`?page=${nextPage}&sortBy=${sortedBy}&sortOrder=${sortOrder}&statusFilter=${statusFilter}`}
             className={`w-8 h-8 rounded flexCol ${lastPage ? "bg-neutral-200 pointer-events-none" : "bg-primary"}`}
           >
             <ChevronRight className="text-white" />

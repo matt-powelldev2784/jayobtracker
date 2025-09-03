@@ -24,13 +24,8 @@ type JobsFilterSelectProps = {
 
 const JobsFilterSelect = ({ currentFilter }: JobsFilterSelectProps) => {
   const router = useRouter();
-  console.log("currentFilter", currentFilter);
 
   const handleChange = (value: string) => {
-    if (value === "All") {
-      router.push(`/view-jobs?page=1&sortBy=createdAt&sortOrder=desc`);
-      return;
-    }
     router.push(`/view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=${value}`);
   };
 
