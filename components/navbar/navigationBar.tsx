@@ -6,7 +6,11 @@ import MobileMenu from "./mobileMenu";
 import { LinkButton } from "../ui/button";
 
 const navigationLinks = [
-  { name: "View Jobs", href: "/view-jobs?page=1&sortBy=createdAt&sortOrder=desc", requiresAuth: true },
+  {
+    name: "View Jobs",
+    href: "/view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=All",
+    requiresAuth: true,
+  },
   { name: "Add Job", href: "/add-job", requiresAuth: true },
   { name: "Log Out", href: "/auth/sign-out", requiresAuth: false, isMobileOnly: true },
 ];
@@ -58,7 +62,7 @@ export const AuthButtons = async () => {
   const { sessionId } = await auth();
 
   return (
-    <div className="hidden md:block flexCol">
+    <div className="hidden md:block md:flexCol">
       {sessionId ? (
         <UserButton />
       ) : (

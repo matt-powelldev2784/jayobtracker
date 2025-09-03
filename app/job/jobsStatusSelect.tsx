@@ -47,10 +47,12 @@ const JobStatusSelect = ({ jobId, currentStatus }: JobStatusSelectProps) => {
       <label htmlFor="job-status" className="block font-bold text-sm text-muted-foreground pl-1 mb-1">
         Update Application Status:
       </label>
+
       <Select value={selected} onValueChange={handleChange} disabled={isPending}>
         <SelectTrigger className="w-full bg-white">
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
+
         <SelectContent>
           {statusOptions.map((option) => (
             <SelectItem key={option.value} value={option.value}>
@@ -59,6 +61,7 @@ const JobStatusSelect = ({ jobId, currentStatus }: JobStatusSelectProps) => {
           ))}
         </SelectContent>
       </Select>
+
       {error && <p className=" text-center text-xs text-destructive">{error}</p>}
     </div>
   );
