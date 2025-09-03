@@ -2,13 +2,19 @@ import { getJobs } from "./getJobs";
 import Link from "next/link";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import ErrorCard from "@/components/ui/errorCard";
-import { Job } from "@prisma/client";
+import { ApplicationStatus, Job } from "@prisma/client";
 import { ArrowRight, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
+import JobsFilterSelect from "./jobFilterSelect";
 
 type JobsPageProps = {
-  searchParams?: { page: string; sortBy: keyof Job; sortOrder: string };
+  searchParams?: {
+    page: string;
+    sortBy: keyof Job;
+    sortOrder: string;
+    statusFilter: ApplicationStatus;
+  };
 };
 
 type JobListProps = {
@@ -24,19 +30,21 @@ type PaginationProps = {
   totalPages: number;
   sortedBy: keyof Job;
   sortOrder: string;
+  statusFilter: ApplicationStatus | undefined;
 };
 
 const JobsPage = async ({ searchParams }: JobsPageProps) => {
   const page = searchParams?.page ? Number(searchParams.page) : 1;
   const sortedBy = searchParams?.sortBy ? searchParams.sortBy : "createdAt";
   const sortOrder = searchParams?.sortOrder === "asc" ? "asc" : "desc";
-  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder });
+  const statusFilter = searchParams?.statusFilter || undefined;
+  const jobsResponse = await getJobs({ page, sortBy: sortedBy, sortOrder, status: statusFilter ?? undefined });
 
   if (!jobsResponse.success) return <ErrorCard message={jobsResponse.error} />;
 
   const { jobs, totalPages } = jobsResponse.data;
   const jobListProps = { jobs, page, totalPages, sortedBy, sortOrder };
-  const paginationProps = { page, totalPages, sortedBy, sortOrder };
+  const paginationProps = { page, totalPages, sortedBy, sortOrder, statusFilter };
 
   return (
     <div className="w-11/12 mt-8 flexCol">
@@ -176,13 +184,15 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder }: JobListProps) => {
   );
 };
 
-const PaginationControls = ({ page, totalPages, sortedBy, sortOrder }: PaginationProps) => {
+const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilter }: PaginationProps) => {
   const firstPage = page === 1;
   const lastPage = page === totalPages;
 
   return (
     <div className="flex justify-between items-center w-full mb-4">
       <LinkButton href="/add-job">Add Job</LinkButton>
+
+      <JobsFilterSelect currentFilter={statusFilter} />
 
       <div className="flex justify-center items-center gap-4 ">
         <Link

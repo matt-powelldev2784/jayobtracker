@@ -20,7 +20,7 @@ export type GetJobsError = {
 };
 
 type GetJobsParams = {
-  status?: ApplicationStatus;
+  status?: ApplicationStatus | undefined;
   page?: number;
   sortBy?: keyof Job;
   sortOrder?: "asc" | "desc";
