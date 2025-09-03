@@ -62,7 +62,7 @@ export const AuthButtons = async () => {
   const { sessionId } = await auth();
 
   return (
-    <div className="hidden md:block flexCol">
+    <div className="hidden md:block md:flexCol">
       {sessionId ? (
         <UserButton />
       ) : (
