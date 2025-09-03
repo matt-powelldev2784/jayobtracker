@@ -9,12 +9,12 @@ import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import JobsFilterSelect from "./jobFilterSelect";
 
 type JobsPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     page: string;
     sortBy: keyof Job;
     sortOrder: string;
     statusFilter: ApplicationStatus;
-  };
+  }>;
 };
 
 type JobListProps = {
@@ -33,7 +33,8 @@ type PaginationProps = {
   statusFilter: ApplicationStatus | undefined;
 };
 
-const JobsPage = async ({ searchParams }: JobsPageProps) => {
+const JobsPage = async (props: JobsPageProps) => {
+  const searchParams = await props.searchParams;
   const page = searchParams?.page ? Number(searchParams.page) : 1;
   const sortedBy = searchParams?.sortBy ? searchParams.sortBy : "createdAt";
   const sortOrder = searchParams?.sortOrder === "asc" ? "asc" : "desc";
