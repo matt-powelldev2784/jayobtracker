@@ -5,6 +5,7 @@ import { LinkButton } from "@/components/ui/button";
 import { CoverLetter, Job } from "@prisma/client";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import GenerateCoverLetterButton from "../generateCoverLetterButton";
+import JobStatusSelect from "../jobsStatusSelect";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -64,6 +65,8 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
           <span className="font-bold">Date Added:</span> {new Date(job.createdAt).toLocaleDateString("en-GB")}
         </div>
       </CardContent>
+
+      <JobStatusSelect jobId={job.id} currentStatus={job.status} />
     </Card>
   );
 };
