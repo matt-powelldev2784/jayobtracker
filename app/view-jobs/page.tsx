@@ -101,7 +101,9 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
             <TableCell>{job.company}</TableCell>
 
             <TableCell className="w-24">
-              <p className={`px-2 py-1 rounded text-xs w-20 text-center ${jobStatusStyle[job.status]}`}>{job.status}</p>
+              <p className={`px-2 py-1 rounded text-[11px] w-20 text-center font-bold ${jobStatusStyle[job.status]}`}>
+                {job.status.toUpperCase()}
+              </p>
             </TableCell>
           </TableRow>
         ))}
@@ -123,7 +125,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
             </div>
           </TableHead>
 
-          <TableHead className="3/12">
+          <TableHead className="4/12">
             <Link
               href={`/view-jobs?page=1&sortBy=company&sortOrder=${nextSortOrder}&statusFilter=${statusFilter}`}
               className="flex items-center"
@@ -157,8 +159,13 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
           </TableHead>
 
           <TableHead className="w-36">
-            Status
-            <ChevronsUpDown className="w-4 h-4 ml-2" />
+            <Link
+              href={`/view-jobs?page=1&sortBy=status&sortOrder=${nextSortOrder}&statusFilter=${statusFilter}`}
+              className="flex items-center"
+            >
+              Status
+              <ChevronsUpDown className="w-4 h-4 ml-2" />
+            </Link>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -181,8 +188,12 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
             <TableCell> {new Date(job.createdAt).toLocaleDateString("en-GB")}</TableCell>
 
             <TableCell className="w-36">
-              <p className={`mx-auto px-2 py-1 rounded text-xs w-20 text-center ${jobStatusStyle[job.status]}`}>
-                {job.status}
+              <p
+                className={`mx-auto px-2 py-1 rounded text-[11px] w-20 text-center font-bold ${
+                  jobStatusStyle[job.status]
+                }`}
+              >
+                {job.status.toUpperCase()}
               </p>
             </TableCell>
           </TableRow>

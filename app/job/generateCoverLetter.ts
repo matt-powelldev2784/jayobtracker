@@ -3,20 +3,26 @@
 import { OpenAI } from "openai";
 import { prisma } from "@/prisma/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { GptModel } from "@/ts/gptModel";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export const generateCoverLetter = async (jobId: number) => {
+type GenerateCoverLetterProps = {
+  jobId: number;
+  gptModel: GptModel;
+};
+
+export const generateCoverLetter = async ({ jobId }: GenerateCoverLetterProps) => {
   try {
     // check user is authenticated
     const { userId } = await auth();
-    if (!userId) throw new Error("Not authenticated");
+    if (!userId) throw new Error("AuthError: User not authenticated");
 
     // get job from db
     const job = await prisma.job.findUnique({
       where: { id: jobId, userId },
     });
-    if (!job) throw new Error("Job not found");
+    if (!job) throw new Error("PrismaError: Job not found");
 
     // create prompt
     const prompt = getPrompt({
@@ -29,13 +35,13 @@ export const generateCoverLetter = async (jobId: number) => {
 
     // use open ai to generate cover letter
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-5",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2000,
-      temperature: 0.7,
+      max_completion_tokens: 4000,
     });
-    const content = completion.choices[0].message.content;
-    if (!content) throw new Error("No content from OpenAI");
+
+    const content = completion.choices[0]?.message?.content;
+    if (!content) throw new Error("OpenAIError: No content returned");
 
     // delete any existing cover letters
     await prisma.coverLetter.deleteMany({
@@ -52,9 +58,10 @@ export const generateCoverLetter = async (jobId: number) => {
 
     return { success: true, data: coverLetter };
   } catch (error) {
+    console.error("generateCoverLetter error:", error); // 👈 log full error
     return {
       success: false,
-      error: error instanceof Error ? "Unknown Error. Please try again later." : String(error),
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 };
@@ -69,50 +76,24 @@ type GetPromptProps = {
 
 const getPrompt = ({ title, company, location, description, applicantWebsite }: GetPromptProps) => {
   const prompt = `
-    You are an expert job application assistant. 
-    Write a professional and formal cover letter for the following junior software developer job. 
-    Your goal is to make the letter concise, specific, and tailored to the company.
-    Write a cover letter that is exactly 5 paragraphs long.
-    Do not include markdown, code formatting, or commentary — return only the plain text cover letter.
+  Write a concise cover letter (strictly 5 small paragraphs) for a junior developer role based on the provided job description. Follow this layout:
+  Keep each paragraph short, clear, and professional. Do not add extra details outside of this structure.
+  Only include information you know that is true.
 
   --- Layout Guide (strictly 5 small paragraphs) ---
-  Paragraph 1 =  I’m writing to express my interest in the ##JOB TITLE##  position at ##COMPANY##. No other information.
-  Paragraph 2 =  1 small sentence on why this company stood out or something specific about the role that appeals to you. 
-                 1 small sentence showing how you could contribute to company, product, or team based on what you know about them. 
-  Paragraph 3 = 1 or 2 sentences on how your skills, projects, or experiences and/or what makes you a strong investment as a junior developer.
+  Paragraph 1 = Im writing to express my interest in the ##JOB TITLE## position at ##COMPANY##. No other information.
+  Paragraph 2 = 1 small sentence on why this company stood out or something specific about the role that appeals to you. 1 small sentence showing how you could contribute to company, product, or team based on what you know about them.
+  Paragraph 3 = 1 or 2 sentences on how your skills, projects, or experiences make you a strong investment as a junior developer.
   Paragraph 4 = 1 sentence of how your previous experience has prepared you for this role, even if not directly related to software development.
-  Paragraph 5 = 1A closing paragraph thanking them for their time, reinforcing your desire to join, and explaining why you would be an asset to the company.
+  Paragraph 5 = A closing paragraph thanking them for their time, reinforcing your desire to join, and explaining why you would be an asset to the company.
 
-
-    Job details:
-    Title: ${title}
-    Company: ${company}
-    Location: ${location || "N/A"}
-    Description: ${description}
-    ApplicantWebsite: ${applicantWebsite}
-
-  --- Example Cover Letter ---
-  ${coverLetterExample}
-
-   --- Additional Instructions ---
-  - Absolutely avoid generic stock phrases such as:
-    "I am excited to apply," 
-    "I believe I am the perfect fit," 
-    "I am writing to express my interest," 
-    "With great enthusiasm," 
-    or similar clichés. 
-  - Do not use intensifiers or filler modifiers such as: truly, very, highly, deeply, extremely, absolutely, really, strongly, greatly, incredibly, or similar words. 
-  - If you feel the urge to write something like "truly innovative," "highly motivating," or similar, replace it with a plain factual description (e.g., "a new approach," "an appealing opportunity," "a significant development"). 
-  - Keep sentences crisp and free of filler. 
-  - Minimize adjectives; only use them when they add concrete meaning (e.g., “open-source tools” is fine, but “remarkably innovative tools” is not). 
-  - Express enthusiasm through specific details (skills, portfolio projects, company facts) rather than subjective emphasis. 
-  - Where possible, ground statements in facts (skills, portfolio, relevant tools) rather than vague claims. 
-  - Vary sentence openings to avoid repetitive patterns. 
-  - Mix sentence lengths: include some short, direct sentences and some longer, more developed ones for a natural human rhythm. 
-  - Ensure the tone is professional, respectful, and confident without exaggeration. 
-  - Always use exactly four paragraphs with line breaks between them.
-  - The final output should read as naturally human-written, not formulaic or over-polished.
-  - Do not include any sign-off (e.g., "Sincerely," "Best regards,").
+  Job details:
+  Title: ${title}
+  Company: ${company}
+  Location: ${location || "N/A"}
+  Description: ${description}
+  Applicant details:    Website: ${applicantWebsite || "N/A"}
+  Example Cover Letter: ${coverLetterExample}
 `;
 
   return prompt;

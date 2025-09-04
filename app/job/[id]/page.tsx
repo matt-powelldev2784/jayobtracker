@@ -8,7 +8,7 @@ import GenerateCoverLetterButton from "../generateCoverLetterButton";
 import JobStatusSelect from "../jobsStatusSelect";
 
 type JobDetailPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 type JobDetailsCardProps = {
@@ -21,7 +21,8 @@ type CoverLetterCardProps = {
 };
 
 const JobDetailPage = async ({ params }: JobDetailPageProps) => {
-  const getJobData = await getJob(Number(params.id));
+  const awaitedParams = await params;
+  const getJobData = await getJob(Number(awaitedParams.id));
 
   if (!getJobData.success) return <ErrorCard message={getJobData.error} />;
 
@@ -52,16 +53,18 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
       </div>
 
       <CardContent className="flexCol gap-4 bg-white border-2 border-darkGrey rounded-lg mx-4 md:mx-6 p-2 text-sm">
-        <div className="flexRow gap-2 mt-2">
-          <span className="font-bold">Status:</span>
-          <span className={`px-2 py-1 rounded text-xs ${jobStatusStyle[job.status]}`}>{job.status}</span>
+        <div className="flexCol mt-2 ">
+          <p className="font-bold">Status:</p>
+          <div className={`px-2 py-1 rounded text-xs font-bold ${jobStatusStyle[job.status]}`}>
+            {job.status.toUpperCase()}
+          </div>
         </div>
 
-        <div className="mb-2">
+        <div className="mb-2 flexCol">
           <span className="font-bold">Location:</span> {job.location || "N/A"}
         </div>
 
-        <div className="mb-2">
+        <div className="mb-2 flexCol">
           <span className="font-bold">Date Added:</span> {new Date(job.createdAt).toLocaleDateString("en-GB")}
         </div>
       </CardContent>
