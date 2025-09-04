@@ -99,5 +99,5 @@ export const processJobSubmission = async (prevState: unknown, formData: FormDat
   }
 
   // On success, redirect to home page
-  redirect("view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=All");
+  redirect("/view-jobs");
 };

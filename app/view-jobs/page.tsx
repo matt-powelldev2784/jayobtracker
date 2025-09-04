@@ -7,10 +7,11 @@ import { ArrowRight, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsUpDown } fr
 import { LinkButton } from "@/components/ui/button";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import JobsFilterSelect from "./jobFilterSelect";
+import { redirect } from "next/navigation";
 
 type JobsPageProps = {
   searchParams: Promise<{
-    page: string;
+    page: number;
     sortBy: keyof Job;
     sortOrder: "asc" | "desc";
     statusFilter: ApplicationStatus;
@@ -36,7 +37,12 @@ type PaginationProps = {
 
 const JobsPage = async (props: JobsPageProps) => {
   const searchParams = await props.searchParams;
-  const page = Number(searchParams?.page);
+  const noSearchParams = Object.keys(searchParams).length === 0;
+  if (noSearchParams) {
+    redirect("/view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=All");
+  }
+
+  const page = searchParams?.page;
   const sortedBy = searchParams?.sortBy;
   const sortOrder = searchParams?.sortOrder;
   const statusFilter = searchParams?.statusFilter;

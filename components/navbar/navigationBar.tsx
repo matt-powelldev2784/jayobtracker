@@ -8,7 +8,7 @@ import { LinkButton } from "../ui/button";
 const navigationLinks = [
   {
     name: "View Jobs",
-    href: "/view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=All",
+    href: "/view-jobs",
     requiresAuth: true,
   },
   { name: "Add Job", href: "/add-job", requiresAuth: true },
