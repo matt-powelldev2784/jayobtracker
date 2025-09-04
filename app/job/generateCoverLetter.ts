@@ -12,7 +12,7 @@ type GenerateCoverLetterProps = {
   gptModel: GptModel;
 };
 
-export const generateCoverLetter = async ({ jobId }: GenerateCoverLetterProps) => {
+export const generateCoverLetter = async ({ jobId, gptModel }: GenerateCoverLetterProps) => {
   try {
     // check user is authenticated
     const { userId } = await auth();
@@ -35,9 +35,9 @@ export const generateCoverLetter = async ({ jobId }: GenerateCoverLetterProps) =
 
     // use open ai to generate cover letter
     const completion = await openai.chat.completions.create({
-      model: "gpt-5",
+      model: gptModel,
       messages: [{ role: "user", content: prompt }],
-      max_completion_tokens: 4000,
+      max_completion_tokens: gptModel === "gpt-5" ? 4000 : 2000,
     });
 
     const content = completion.choices[0]?.message?.content;

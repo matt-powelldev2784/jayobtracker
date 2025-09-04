@@ -87,7 +87,7 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
       </CardHeader>
 
       {coverLetter && (
-        <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-8 w-full flex flex-col items-start">
+        <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-4 md:p-8 w-full flex flex-col items-start">
           {coverLetterText?.map((paragraph, index) => (
             <p key={index} className="mb-4">
               {paragraph}
@@ -96,17 +96,17 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
         </div>
       )}
 
-      <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-8 w-full flexCol gap-2">
-        <GenerateCoverLetterButton jobId={jobId} />
-
+      <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-4 md:p-8 w-full flexCol gap-2">
         <CardDescription className="text-center mt-2]">
-          {!coverLetter && <p>Click the button above to generate cover letter template</p>}
+          {!coverLetter && <p>Click the button below to generate cover letter template</p>}
           {coverLetter && (
             <p>
-              Click the button above to <span className="font-bold">regenerate</span> the cover letter template
+              Click the button below to <span className="font-bold">regenerate</span> the cover letter template
             </p>
           )}
         </CardDescription>
+
+        <GenerateCoverLetterButton jobId={jobId} />
       </div>
     </Card>
   );
