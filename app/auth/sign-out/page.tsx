@@ -3,7 +3,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { SignOutButton } from "@clerk/nextjs";
 
 const SignOutPage = () => (
-  <Card className="w-11/12 max-w-[700px] mt-8 pb-8">
+  <Card className="w-11/12 max-w-[700px] mt-8 pb-8 border-2 border-darkGrey rounded-2xl">
     <CardHeader className="bg-primary">
       <CardTitle className="text-center text-white">Log Out</CardTitle>
     </CardHeader>
