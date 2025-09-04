@@ -2,35 +2,10 @@ import { LinkButton } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { FileText, Sparkles, UserCheck } from "lucide-react";
 import { redirect } from "next/navigation";
-import updateUser from "./auth/update-user/updateUser";
-
-const featuresData = [
-  {
-    id: 3,
-    icon: FileText,
-    title: "Smart Parsing",
-    description: "Paste job adverts and let Jayob extract key details automatically.",
-  },
-  {
-    id: 2,
-    icon: UserCheck,
-    title: "Application Tracker",
-    description: "Keep track of all your job applications and statuses in one place.",
-  },
-  {
-    id: 1,
-    icon: Sparkles,
-    title: "AI Cover Letters",
-    description: "Generate tailored cover letters instantly for every job application.",
-  },
-];
 
 export default async function Home() {
   const { isAuthenticated } = await auth();
-  if (isAuthenticated) {
-    await updateUser();
-    redirect("/view-jobs");
-  }
+  if (isAuthenticated) redirect("/view-jobs");
 
   return (
     <main className="flex w-screen flex-col items-center justify-center">
@@ -78,3 +53,24 @@ export default async function Home() {
     </main>
   );
 }
+
+const featuresData = [
+  {
+    id: 3,
+    icon: FileText,
+    title: "Smart Parsing",
+    description: "Paste job adverts and let Jayob extract key details automatically.",
+  },
+  {
+    id: 2,
+    icon: UserCheck,
+    title: "Application Tracker",
+    description: "Keep track of all your job applications and statuses in one place.",
+  },
+  {
+    id: 1,
+    icon: Sparkles,
+    title: "AI Cover Letters",
+    description: "Generate tailored cover letters instantly for every job application.",
+  },
+];

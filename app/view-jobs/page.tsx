@@ -8,6 +8,8 @@ import { LinkButton } from "@/components/ui/button";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import JobsFilterSelect from "./jobFilterSelect";
 import { redirect } from "next/navigation";
+import updateUser from "../auth/update-user/updateUser";
+import { auth } from "@clerk/nextjs/server";
 
 type JobsPageProps = {
   searchParams: Promise<{
@@ -36,6 +38,9 @@ type PaginationProps = {
 };
 
 const JobsPage = async (props: JobsPageProps) => {
+  const { isAuthenticated } = await auth();
+  if (!isAuthenticated) updateUser();
+
   const searchParams = await props.searchParams;
   const noSearchParams = Object.keys(searchParams).length === 0;
   if (noSearchParams) {
