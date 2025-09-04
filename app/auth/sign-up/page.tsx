@@ -6,13 +6,14 @@ const SignUpPage = () => (
       path="/auth/sign-up"
       routing="path"
       signInUrl="/auth/sign-in"
+      forceRedirectUrl="/view-jobs"
       appearance={{
         elements: {
-          formButtonPrimary: 'bg-primary text-white',
+          formButtonPrimary: "bg-primary text-white",
         },
       }}
     />
   </div>
-)
+);
 
 export default SignUpPage

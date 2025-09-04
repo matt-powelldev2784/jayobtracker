@@ -62,11 +62,11 @@ export const AuthButtons = async () => {
   const { sessionId } = await auth();
 
   return (
-    <div className="hidden md:block md:flexCol">
+    <div className="hidden md:flex md:flex-col md:items-center md:justify-center h-full">
       {sessionId ? (
         <UserButton />
       ) : (
-        <Link href="/auth/sign-in" className="flex items-center gap-2 text-white w-fit h-full">
+        <Link href="/auth/sign-in" className="flex items-center gap-2 text-white w-fit h-full ">
           <CircleUserRound className="w-8 h-8 md:h-5 md:w-5" />
           <span className="hidden md:block">Sign In</span>
         </Link>

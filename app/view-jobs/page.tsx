@@ -8,6 +8,8 @@ import { LinkButton } from "@/components/ui/button";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import JobsFilterSelect from "./jobFilterSelect";
 import { redirect } from "next/navigation";
+import updateUser from "../auth/update-user/updateUser";
+import { auth } from "@clerk/nextjs/server";
 
 type JobsPageProps = {
   searchParams: Promise<{
@@ -36,6 +38,9 @@ type PaginationProps = {
 };
 
 const JobsPage = async (props: JobsPageProps) => {
+  const { isAuthenticated } = await auth();
+  if (!isAuthenticated) updateUser();
+
   const searchParams = await props.searchParams;
   const noSearchParams = Object.keys(searchParams).length === 0;
   if (noSearchParams) {
@@ -107,6 +112,14 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
             </TableCell>
           </TableRow>
         ))}
+
+        {jobs.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={3} className="text-center py-4 h-12">
+              Click add job to get started!
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
@@ -198,6 +211,14 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
             </TableCell>
           </TableRow>
         ))}
+
+        {jobs.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center py-4 h-12">
+              To add your first job, click the Add Job button above.
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
@@ -205,10 +226,9 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
 
 const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilter }: PaginationProps) => {
   const firstPage = page == 1;
-  const lastPage = page === totalPages;
+  const lastPage = totalPages === 0 ? true : page === totalPages;
   const prevPage = Math.max(1, page - 1);
   const nextPage = Math.min(totalPages, page + 1);
-  console.log("firstPage", firstPage);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-end w-full mb-4">
