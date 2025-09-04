@@ -38,7 +38,9 @@ export default function Home() {
             Streamline your job search and land your next role faster.
           </p>
           <div className="mb-6 flex w-full flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-4">
-            <LinkButton href="/view-jobs">Get Started</LinkButton>
+            <LinkButton size="lg" href="/auth/sign-in" className="px-12">
+              Get Started
+            </LinkButton>
           </div>
         </div>
       </article>
