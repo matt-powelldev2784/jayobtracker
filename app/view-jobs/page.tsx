@@ -42,7 +42,7 @@ const JobsPage = async (props: JobsPageProps) => {
     redirect("/view-jobs?page=1&sortBy=createdAt&sortOrder=desc&statusFilter=All");
   }
 
-  const page = searchParams?.page;
+  const page = Number(searchParams?.page);
   const sortedBy = searchParams?.sortBy;
   const sortOrder = searchParams?.sortOrder;
   const statusFilter = searchParams?.statusFilter;
@@ -193,10 +193,11 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
 };
 
 const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilter }: PaginationProps) => {
-  const firstPage = page === 1;
+  const firstPage = page == 1;
   const lastPage = page === totalPages;
   const prevPage = Math.max(1, page - 1);
   const nextPage = Math.min(totalPages, page + 1);
+  console.log("firstPage", firstPage);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-end w-full mb-4">
