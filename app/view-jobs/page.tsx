@@ -112,6 +112,14 @@ const MobileJobsList = ({ jobs }: JobListProps) => {
             </TableCell>
           </TableRow>
         ))}
+
+        {jobs.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={3} className="text-center py-4 h-12">
+              Click add job to get started!
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
@@ -203,6 +211,14 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
             </TableCell>
           </TableRow>
         ))}
+
+        {jobs.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center py-4 h-12">
+              To add your first job, click the Add Job button above.
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
@@ -210,7 +226,7 @@ const DesktopJobsList = ({ jobs, sortedBy, sortOrder, statusFilter }: JobListPro
 
 const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilter }: PaginationProps) => {
   const firstPage = page == 1;
-  const lastPage = page === totalPages;
+  const lastPage = totalPages === 0 ? true : page === totalPages;
   const prevPage = Math.max(1, page - 1);
   const nextPage = Math.min(totalPages, page + 1);
 
