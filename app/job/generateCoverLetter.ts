@@ -30,7 +30,7 @@ export const generateCoverLetter = async ({ jobId, gptModel }: GenerateCoverLett
       company: job.company,
       location: job.location,
       description: job.description,
-      applicantWebsite: "https://matthew-powell-dev.com/",
+      applicantWebsite: null,
     });
 
     // use open ai to generate cover letter
@@ -58,7 +58,6 @@ export const generateCoverLetter = async ({ jobId, gptModel }: GenerateCoverLett
 
     return { success: true, data: coverLetter };
   } catch (error) {
-    console.error("generateCoverLetter error:", error); // 👈 log full error
     return {
       success: false,
       error: error instanceof Error ? error.message : String(error),
