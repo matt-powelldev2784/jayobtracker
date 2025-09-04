@@ -2,6 +2,7 @@ import { LinkButton } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { FileText, Sparkles, UserCheck } from "lucide-react";
 import { redirect } from "next/navigation";
+import updateUser from "./auth/update-user/updateUser";
 
 const featuresData = [
   {
@@ -26,7 +27,10 @@ const featuresData = [
 
 export default async function Home() {
   const { isAuthenticated } = await auth();
-  if (isAuthenticated) redirect("/view-jobs");
+  if (isAuthenticated) {
+    await updateUser();
+    redirect("/view-jobs");
+  }
 
   return (
     <main className="flex w-screen flex-col items-center justify-center">

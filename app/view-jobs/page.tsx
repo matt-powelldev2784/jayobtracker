@@ -208,7 +208,6 @@ const PaginationControls = ({ page, totalPages, sortedBy, sortOrder, statusFilte
   const lastPage = page === totalPages;
   const prevPage = Math.max(1, page - 1);
   const nextPage = Math.min(totalPages, page + 1);
-  console.log("firstPage", firstPage);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-end w-full mb-4">
