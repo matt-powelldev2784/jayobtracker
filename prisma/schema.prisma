@@ -43,7 +43,8 @@ model User {
   id        String   @id @default(uuid())
   name      String?
   website   String?
-  jobField  String?
+  jobRole   String?
+  industry  String?
   notes     String?
   userId    String    @unique
   exampleCoverLetters ExampleCoverLetter[] 

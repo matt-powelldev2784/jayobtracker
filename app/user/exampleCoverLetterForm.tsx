@@ -18,7 +18,7 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-const AddExampleLetterForm = () => {
+const AddExampleLCoverLetterForm = () => {
   const [state, formAction, isPending] = useActionState(addExampleCoverLetter, null);
 
   const form = useForm<FormValues>({
@@ -92,4 +92,4 @@ const AddExampleLetterForm = () => {
   );
 };
 
-export default AddExampleLetterForm;
+export default AddExampleLCoverLetterForm;

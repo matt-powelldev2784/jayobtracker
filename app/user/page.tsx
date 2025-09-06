@@ -1,13 +1,13 @@
 import { InfoIcon } from "lucide-react";
 import { CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Card } from "@/components/ui/card";
-import AddExampleLetterForm from "./exampleCoverLetterForm";
+import AddExampleLCoverLetterForm from "./exampleCoverLetterForm";
 
 const UserPage = () => {
   return (
     <main className="flex min-h-screen flex-col md:flex-row items-stretch w-screen">
       <LeftMenu />
-      <AddExampleLetterForm />
+      <AddExampleLCoverLetterForm />
     </main>
   );
 };
