@@ -77,7 +77,9 @@ const getPrompt = ({ title, company, location, description, applicantWebsite }: 
   const prompt = `
   Write a concise cover letter (strictly 5 small paragraphs) for a junior developer role based on the provided job description. Follow this layout:
   Keep each paragraph short, clear, and professional. Do not add extra details outside of this structure.
-  Only include information you know that is true.
+  Use the 2 example cover letters to copy my style of writing, tone and structure.
+  These cover letters also contain details about me that you could incorporate into the cover letter.
+  these cover letters should be treated as the gold standard for tone, style and structure.
 
   --- Layout Guide (strictly 5 small paragraphs) ---
   Paragraph 1 = Im writing to express my interest in the ##JOB TITLE## position at ##COMPANY##. No other information.
@@ -93,6 +95,7 @@ const getPrompt = ({ title, company, location, description, applicantWebsite }: 
   Description: ${description}
   Applicant details:    Website: ${applicantWebsite || "N/A"}
   Example Cover Letter: ${coverLetterExample}
+  Example Cover Letter 2: ${coverLetterExample2}
 `;
 
   return prompt;
@@ -109,3 +112,14 @@ In my current role as a project manager at a healthcare company supported by VC 
 
 Thank you for considering my application. I would welcome the opportunity to discuss how I can contribute to delivering an outstanding platform for users.
 `;
+
+const coverLetterExample2 = `
+Im writing to express my interest in the Junior Developer (Entry-Level) position at Apex Infinity Solutions. This position presents a fantastic opportunity for someone like me to grow my knowledge in a discipline I truly enjoy.
+
+The combination of working in the in-demand Salesforce space and learning through Apex Infinity’s structured mentorship program is what really excites me about this role.
+
+I have a strong foundation in building and testing data-driven applications using TypeScript, React, NextJS, and NodeJS. These projects demonstrate both my technical skills and my commitment to continuous learning. Please feel free to explore my portfolio and GitHub profile for a closer look at these projects.
+
+With previous experience as a project manager in a fast-paced, high-growth environment, I have developed strong communication and problem-solving skills that will help me succeed in this role.
+
+Thank you for considering my application. I would welcome the opportunity to discuss how I can help deliver effective Salesforce solutions and drive your business forward.`;

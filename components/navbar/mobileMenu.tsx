@@ -42,7 +42,7 @@ const MobileMenu = ({ isAuthenticated, navigationLinks }: MobileMenuProps) => {
       </button>
 
       {menuIsOpen && (
-        <div className="absolute right-0 top-12 z-50 bg-white shadow-lg rounded flex flex-col w-screen">
+        <div className="absolute right-0 top-14 z-50 bg-white shadow-lg rounded flex flex-col w-screen">
           {navigationLinks.map((link) => {
             if (link.requiresAuth && !isAuthenticated) return null;
 

@@ -40,7 +40,7 @@ export default JobDetailPage;
 
 const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
   return (
-    <Card className="w-full min-h-fit md:w-[350px] md:min-w-[350px] gap-0 bg-neutral-100 flex flex-col pb-">
+    <Card className="w-full min-h-fit md:w-[350px] md:min-w-[300px] lg:min-w-[350px] gap-0 bg-neutral-100 flex flex-col">
       <CardHeader className="mt-3">
         <CardTitle>{job.title}</CardTitle>
         <CardDescription>{job.company}</CardDescription>
