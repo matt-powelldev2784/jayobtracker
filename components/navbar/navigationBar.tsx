@@ -12,8 +12,8 @@ const navigationLinks = [
     requiresAuth: true,
   },
   { name: "Add Job", href: "/add-job", requiresAuth: true },
-  { name: "Log Out", href: "/auth/sign-out", requiresAuth: false, isMobileOnly: true },
   { name: "Settings", href: "/user", requiresAuth: true },
+  { name: "Log Out", href: "/auth/sign-out", requiresAuth: false, isMobileOnly: true },
 ];
 
 export const NavigationBar = async () => {
