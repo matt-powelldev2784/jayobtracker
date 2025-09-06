@@ -13,6 +13,7 @@ const navigationLinks = [
   },
   { name: "Add Job", href: "/add-job", requiresAuth: true },
   { name: "Log Out", href: "/auth/sign-out", requiresAuth: false, isMobileOnly: true },
+  { name: "Settings", href: "/user", requiresAuth: true },
 ];
 
 export const NavigationBar = async () => {
