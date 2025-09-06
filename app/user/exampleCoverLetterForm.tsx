@@ -41,7 +41,7 @@ const AddExampleLetterForm = () => {
   }, [state?.data?.id, form]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8">
+    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8 pb-24">
       <Toaster position="bottom-right" richColors />
       <CardWithBorder className="mt-2 md:mt-8">
         <CardHeader>
@@ -80,7 +80,7 @@ const AddExampleLetterForm = () => {
               {state?.error && <p className="text-xs text-red-500">{state.error}</p>}
 
               <div className="flexCol">
-                <Button type="submit" disabled={isPending} className="min-w-[180px]">
+                <Button type="submit" disabled={isPending} className="min-w-[280px]">
                   {isPending ? <Loader className="h-4 w-4 animate-spin" /> : "Add Example Cover Letter"}
                 </Button>
               </div>
