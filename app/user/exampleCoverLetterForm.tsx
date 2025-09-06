@@ -44,7 +44,7 @@ const AddExampleLCoverLetterForm = () => {
   }, [dataSubmitSuccess, form]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8 pb-24">
+    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8">
       <Toaster position="bottom-right" richColors />
       <CardWithBorder className="mt-2 md:mt-8">
         <CardHeader>

@@ -2,12 +2,18 @@ import { InfoIcon } from "lucide-react";
 import { CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Card } from "@/components/ui/card";
 import AddExampleLCoverLetterForm from "./exampleCoverLetterForm";
+import RoleAndIndustryForm from "./addRoleAndIndustryForm";
 
 const UserPage = () => {
   return (
     <main className="flex min-h-screen flex-col md:flex-row items-stretch w-screen">
       <LeftMenu />
-      <AddExampleLCoverLetterForm />
+      <div className="flex flex-col items-start justify-center w-full">
+        <AddExampleLCoverLetterForm />
+        <span className="h-2 border-b-2 border-darkGrey w-11/12 mt-8 md:hidden mx-auto"></span>
+        <RoleAndIndustryForm />
+        <span className="h-24" />
+      </div>
     </main>
   );
 };
@@ -20,8 +26,7 @@ const LeftMenu = () => {
       <CardHeader className="mt-2 md:mt-4">
         <CardTitle>User Settings</CardTitle>
         <CardDescription className="">
-          Adding your preferences here enhances the power of the AI to generate cover letters that match your style and
-          tone.
+          Adding your preferences here helps AI to generate cover letters that match your style and tone.
         </CardDescription>
       </CardHeader>
 
