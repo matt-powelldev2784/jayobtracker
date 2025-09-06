@@ -21,6 +21,10 @@ type FormValues = z.infer<typeof schema>;
 const AddExampleLCoverLetterForm = () => {
   const [state, formAction, isPending] = useActionState(addExampleCoverLetter, null);
 
+  // the effect key to trigger a form reset and toast on successful addition of a cover letter
+  // a new data id is only created if a cover letter is successfully added to the database
+  const dataSubmitSuccess = state?.data?.id;
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { coverLetter: "" },
@@ -33,12 +37,11 @@ const AddExampleLCoverLetterForm = () => {
   };
 
   useEffect(() => {
-    // display toast and reset form on success
-    if (state?.data?.id) {
+    if (dataSubmitSuccess) {
       toast.success("Example Cover Letter Added.");
       form.reset();
     }
-  }, [state?.data?.id, form]);
+  }, [dataSubmitSuccess, form]);
 
   return (
     <section className="w-full flex flex-col items-center justify-start px-4 md:px-8 pb-24">
@@ -53,10 +56,7 @@ const AddExampleLCoverLetterForm = () => {
 
         <CardContent>
           <Form {...form}>
-            <form
-              key={state?.success ? `reset-${state.data?.id ?? Date.now()}` : "initial-key"}
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="coverLetter"
@@ -77,7 +77,7 @@ const AddExampleLCoverLetterForm = () => {
                 )}
               />
 
-              {state?.error && <p className="text-xs text-red-500">{state.error}</p>}
+              {state?.error && <p className="text-xs text-red-500 overflow-clip">{state.error}</p>}
 
               <div className="flexCol">
                 <Button type="submit" disabled={isPending} className="min-w-[280px]">
