@@ -21,7 +21,7 @@ export const NavigationBar = async () => {
   const isAuthenticated = !!sessionId;
 
   return (
-    <nav className="h-12 md:h-16 flex items-center justify-between mx-0 md:mx-4 px-0 pl-4 md:px-4 relative border-b border-gray-300 gap-2">
+    <nav className="h-14 md:h-16 flex items-center justify-between mx-0 md:mx-4 px-0 pl-4 md:px-4 relative border-b border-gray-300 gap-2">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 h-full">
         <img className="h-8 md:h-9 md:block" src="/jayob_logo_green.svg" alt="Jayob Logo" />
