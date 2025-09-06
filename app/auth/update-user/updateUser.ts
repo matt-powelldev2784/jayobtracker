@@ -18,16 +18,23 @@ const updateUser = async () => {
 
   const userId = user.id;
   const name = [user.firstName, user.lastName].filter(Boolean).join(" ") || null;
+  const primaryEmail =
+    user.primaryEmailAddress?.emailAddress ||
+    user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress ||
+    user.emailAddresses[0]?.emailAddress ||
+    null;
 
   try {
     const user: User = await prisma.user.upsert({
       where: { userId },
-      update: { name },
+      update: { name, email: primaryEmail },
       create: {
         userId,
         name,
+        email: primaryEmail,
         website: null,
-        jobField: null,
+        jobRole: null,
+        industry: null,
         notes: null,
       },
     });
