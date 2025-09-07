@@ -4,17 +4,19 @@ import { Card } from "@/components/ui/card";
 import AddExampleLCoverLetterForm from "./exampleCoverLetterForm";
 import RoleAndIndustryForm from "./addRoleAndIndustryForm";
 
-const UserPage = () => {
+
+
+const UserPage = async () => {
   return (
-    <main className="flex min-h-screen flex-col md:flex-row items-stretch w-screen">
+    <div className="flex min-h-screen flex-col md:flex-row items-stretch w-screen">
       <LeftMenu />
-      <div className="flex flex-col items-start justify-center w-full">
+
+      <div className="flex flex-col items-start justify-center w-full gap-8 md:gap-0">
         <AddExampleLCoverLetterForm />
-        <span className="h-2 border-b-2 border-darkGrey w-11/12 mt-8 md:hidden mx-auto"></span>
         <RoleAndIndustryForm />
-        <span className="h-24" />
+        <div className="h-24" />
       </div>
-    </main>
+    </div>
   );
 };
 
