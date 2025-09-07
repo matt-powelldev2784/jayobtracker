@@ -21,10 +21,6 @@ type FormValues = z.infer<typeof schema>;
 const AddExampleLCoverLetterForm = () => {
   const [state, formAction, isPending] = useActionState(addExampleCoverLetter, null);
 
-  // the effect key to trigger a form reset and toast on successful addition of a cover letter
-  // a new data id is only created if a cover letter is successfully added to the database
-  const dataSubmitSuccess = state?.data?.id;
-
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { coverLetter: "" },
@@ -35,6 +31,10 @@ const AddExampleLCoverLetterForm = () => {
     formData.append("coverLetter", values.coverLetter.trim());
     startTransition(() => formAction(formData));
   };
+
+  // the effect key to trigger a form reset and toast on successful addition of a cover letter
+  // a new data id is only created if a cover letter is successfully added to the database
+  const dataSubmitSuccess = state?.data?.id;
 
   useEffect(() => {
     if (dataSubmitSuccess) {

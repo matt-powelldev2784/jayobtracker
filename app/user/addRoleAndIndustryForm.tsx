@@ -23,10 +23,6 @@ type FormValues = z.infer<typeof schema>;
 const RoleAndIndustryForm = () => {
   const [state, formAction, isPending] = useActionState(addRoleAndIndustry, null);
 
-  // the effect key to trigger a form reset and toast on successful addition of a cover letter
-  // a new data id is only created if a cover letter is successfully added to the database
-  const dataSubmitSuccess = state?.data?.id;
-
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { jobRole: "", industry: "" },
@@ -38,6 +34,10 @@ const RoleAndIndustryForm = () => {
     formData.append("industry", values.industry);
     startTransition(() => formAction(formData));
   };
+
+  // the effect key to trigger a form reset and toast on successful addition of a cover letter
+  // a new data id is only created if a cover letter is successfully added to the database
+  const dataSubmitSuccess = state?.data?.id;
 
   useEffect(() => {
     if (dataSubmitSuccess) {
