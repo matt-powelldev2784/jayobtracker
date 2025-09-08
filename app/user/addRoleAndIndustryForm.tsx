@@ -47,16 +47,17 @@ const RoleAndIndustryForm = () => {
   }, [dataSubmitSuccess, form]);
 
   return (
-    <article className="w-full flex flex-col items-center justify-start px-4 md:px-8">
+    <article className="w-full flex flex-col items-center justify-start md:px-8">
       <Toaster position="bottom-right" richColors />
 
-      <CardWithBorder className="mt-6">
+      <CardWithBorder className="">
         <CardHeader>
           <CardTitle>Role and Industry Details</CardTitle>
-          <CardDescription>
-            Provide your target role and industry so the AI can better tailor cover letter tone and relevance.
-          </CardDescription>
         </CardHeader>
+
+        <CardDescription className="hidden md:block">
+          Provide your target role and industry so the AI can better tailor cover letter tone and relevance.
+        </CardDescription>
 
         <CardContent>
           <Form {...form}>
@@ -93,11 +94,9 @@ const RoleAndIndustryForm = () => {
 
               {state?.error && !state.success && <p className="text-xs text-red-500">{state.error}</p>}
 
-              <div className="flexCol">
-                <Button type="submit" disabled={isPending} className="min-w-[280px]">
-                  {isPending ? <Loader className="animate-spin" /> : "Save Role and Industry Details"}
-                </Button>
-              </div>
+              <Button type="submit" disabled={isPending} className="w-full">
+                {isPending ? <Loader className="animate-spin" /> : "Save Role and Industry Details"}
+              </Button>
             </form>
           </Form>
         </CardContent>

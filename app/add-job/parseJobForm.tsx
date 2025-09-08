@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "@/components/ui/form";
 import { CardWithBorder, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { Loader, PlusCircle } from "lucide-react";
+import { Loader } from "lucide-react";
 
 const schema = z.object({
   text: z.string().min(100, "Job description must be at least 100 characters"),
@@ -37,18 +37,16 @@ const ParseJobForm = () => {
   };
 
   return (
-    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8">
-      <CardWithBorder className="mt-2 md:mt-8">
+    <section className="w-full flex flex-col items-center justify-start md:px-8">
+      <CardWithBorder className="md:mt-8">
         <CardHeader>
-          <PlusCircle className="w-10 h-10 text-secondary" />
-
           <CardTitle>Auto Fill Job Details</CardTitle>
-
-          {/* <CardDescription className="mx-auto text-center">
-            Copy and paste a job advert and and URL to auto-fill the job details. This leverages AI to extract key
-            information from the job posting.
-          </CardDescription> */}
         </CardHeader>
+
+        <CardDescription className="hidden md:block">
+          Copy and paste a job advert and and URL to auto-fill the job details. This leverages AI to extract key
+          information from the job posting.
+        </CardDescription>
 
         <CardContent>
           <Form {...form}>
