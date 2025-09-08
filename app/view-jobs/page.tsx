@@ -39,7 +39,7 @@ type PaginationProps = {
 
 const JobsPage = async (props: JobsPageProps) => {
   const { isAuthenticated } = await auth();
-  if (!isAuthenticated) updateUser();
+  if (!isAuthenticated) await updateUser();
 
   const searchParams = await props.searchParams;
   const noSearchParams = Object.keys(searchParams).length === 0;

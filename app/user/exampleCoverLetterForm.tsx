@@ -18,7 +18,7 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-const AddExampleLetterForm = () => {
+const AddExampleLCoverLetterForm = () => {
   const [state, formAction, isPending] = useActionState(addExampleCoverLetter, null);
 
   const form = useForm<FormValues>({
@@ -32,31 +32,32 @@ const AddExampleLetterForm = () => {
     startTransition(() => formAction(formData));
   };
 
+  // the effect key to trigger a form reset and toast on successful addition of a cover letter
+  // a new data id is only created if a cover letter is successfully added to the database
+  const dataSubmitSuccess = state?.data?.id;
+
   useEffect(() => {
-    // display toast and reset form on success
-    if (state?.data?.id) {
+    if (dataSubmitSuccess) {
       toast.success("Example Cover Letter Added.");
       form.reset();
     }
-  }, [state?.data?.id, form]);
+  }, [dataSubmitSuccess, form]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-start px-4 md:px-8 pb-24">
+    <section className="w-full flex flex-col items-center justify-start md:px-8">
       <Toaster position="bottom-right" richColors />
-      <CardWithBorder className="mt-2 md:mt-8">
+      <CardWithBorder className="md:mt-8">
         <CardHeader>
           <CardTitle>Add Example Cover Letter</CardTitle>
-          <CardDescription>
-            Paste or write example cover letters into the text box and click the submit button
-          </CardDescription>
         </CardHeader>
+
+        <CardDescription className="hidden md:block">
+          Paste or write example cover letters into the text box and click the submit button
+        </CardDescription>
 
         <CardContent>
           <Form {...form}>
-            <form
-              key={state?.success ? `reset-${state.data?.id ?? Date.now()}` : "initial-key"}
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="coverLetter"
@@ -77,13 +78,11 @@ const AddExampleLetterForm = () => {
                 )}
               />
 
-              {state?.error && <p className="text-xs text-red-500">{state.error}</p>}
+              {state?.error && <p className="text-xs text-red-500 overflow-clip">{state.error}</p>}
 
-              <div className="flexCol">
-                <Button type="submit" disabled={isPending} className="min-w-[280px]">
-                  {isPending ? <Loader className="h-4 w-4 animate-spin" /> : "Add Example Cover Letter"}
-                </Button>
-              </div>
+              <Button type="submit" disabled={isPending} className="w-full">
+                {isPending ? <Loader className="h-4 w-4 animate-spin" /> : "Add Example Cover Letter"}
+              </Button>
             </form>
           </Form>
         </CardContent>
@@ -92,4 +91,4 @@ const AddExampleLetterForm = () => {
   );
 };
 
-export default AddExampleLetterForm;
+export default AddExampleLCoverLetterForm;

@@ -1,11 +1,12 @@
 import ErrorCard from "@/components/ui/errorCard";
 import { getJob } from "../getJob";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { CoverLetter, Job } from "@prisma/client";
 import { jobStatusStyle } from "@/ts/jobStatusStyle";
 import GenerateCoverLetterButton from "../generateCoverLetterButton";
 import JobStatusSelect from "../jobsStatusSelect";
+import LeftMenu from "@/components/ui/leftMenu";
 
 type JobDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -40,12 +41,7 @@ export default JobDetailPage;
 
 const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
   return (
-    <Card className="w-full min-h-fit md:w-[350px] md:min-w-[300px] lg:min-w-[350px] gap-0 bg-neutral-100 flex flex-col">
-      <CardHeader className="mt-3">
-        <CardTitle>{job.title}</CardTitle>
-        <CardDescription>{job.company}</CardDescription>
-      </CardHeader>
-
+    <LeftMenu title={job.title} description={job.company} className="pb-6">
       <div className="w-full px-4 md:px-6 mt-2 mb-5 flexCol">
         <LinkButton href={job.url} target="_blank">
           View Job Advert
@@ -70,7 +66,7 @@ const JobDetailsCard = ({ job }: JobDetailsCardProps) => {
       </CardContent>
 
       <JobStatusSelect jobId={job.id} currentStatus={job.status} />
-    </Card>
+    </LeftMenu>
   );
 };
 
@@ -78,13 +74,11 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
   const coverLetterText = coverLetter ? formatCoverLetterText(coverLetter.content) : null;
 
   return (
-    <Card className="w-full h-full flex flex-col items-center justify-start px-4 md:px-8">
-      <CardHeader className="w-full max-w-11/12 mt-3">
-        <CardTitle className="text-center">AI Generated Cover Letter Template</CardTitle>
-        <CardDescription className="text-center">
-          This AI-generated draft is designed to help you quickly craft a tailored cover letter.
-        </CardDescription>
-      </CardHeader>
+    <div className="w-full h-full flex flex-col items-center justify-start px-4 md:px-8 mb-16">
+      <CardTitle className="mt-4 md:mt-6">AI Generated Cover Letter Template</CardTitle>
+      <CardDescription className="text-center">
+        This AI-generated draft is designed to help you quickly craft a tailored cover letter.
+      </CardDescription>
 
       {coverLetter && (
         <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-4 md:p-8 w-full flex flex-col items-start">
@@ -108,7 +102,7 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
 
         <GenerateCoverLetterButton jobId={jobId} />
       </div>
-    </Card>
+    </div>
   );
 };
 

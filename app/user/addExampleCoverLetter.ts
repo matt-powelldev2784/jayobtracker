@@ -17,18 +17,22 @@ export type AddExampleCoverLetterAction = (
 
 export const addExampleCoverLetter: AddExampleCoverLetterAction = async (_prevState, formData) => {
   try {
+    // authenticate user
     const { userId } = await auth();
-    if (!userId) return { success: false, error: "User not authenticated." };
+    if (!userId) {
+      return { success: false, error: "User not authenticated." };
+    }
 
+    // get cover letter and validate
     const coverLetter = formData.get("coverLetter");
     if (!coverLetter || typeof coverLetter !== "string") {
       return { success: false, error: "Error reading cover letter data." };
     }
-
     if (coverLetter.length < 100) {
       return { success: false, error: "Minimum 100 characters required." };
     }
 
+    // add cover letter to database
     const newCoverLetter = await prisma.exampleCoverLetter.create({
       data: { content: coverLetter, userId },
     });
