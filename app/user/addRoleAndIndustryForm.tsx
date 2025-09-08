@@ -68,9 +68,9 @@ const RoleAndIndustryForm = () => {
                   name="jobRole"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Job Role</FormLabel>
+                      <FormLabel>Job Role e.g Engineer</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Frontend Engineer" disabled={isPending} {...field} />
+                        <Input placeholder="Job role e.g Engineer" disabled={isPending} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -84,7 +84,7 @@ const RoleAndIndustryForm = () => {
                     <FormItem>
                       <FormLabel>Industry</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. FinTech" disabled={isPending} {...field} />
+                        <Input placeholder="Industry e.g Construction" disabled={isPending} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

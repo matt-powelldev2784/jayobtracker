@@ -10,7 +10,7 @@ const UserPage = async () => {
         title="User Settings"
         description="Adding your preferences here helps AI to generate tailored cover letters that match your style and tone."
       >
-        <article className="bg-white mx-4 p-4 rounded-lg flex flex-col gap-2 hidden md:block">
+        <article className="bg-white mx-4 p-4 rounded-lg flex-col gap-2 hidden md:flex">
           <div className="flexCol mb-2">
             <InfoIcon />
             <p className="text-center">Example Cover Letters</p>
