@@ -21,6 +21,12 @@ type CoverLetterCardProps = {
   jobId: number;
 };
 
+const formatCoverLetterText = (text: string) => {
+  const coverLetterParagraphs = text.split("\n\n").map((line) => line.trim());
+
+  return coverLetterParagraphs;
+};
+
 const JobDetailPage = async ({ params }: JobDetailPageProps) => {
   const awaitedParams = await params;
   const getJobData = await getJob(Number(awaitedParams.id));
@@ -91,8 +97,9 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
       )}
 
       <div className="mb-2 border-2 border-darkGrey rounded-lg max-w-[900px] p-4 md:p-8 w-full flexCol gap-2">
-        <CardDescription className="text-center mt-2]">
+        <CardDescription className="text-center p-0">
           {!coverLetter && <p>Click the button below to generate cover letter template</p>}
+
           {coverLetter && (
             <p>
               Click the button below to <span className="font-bold">regenerate</span> the cover letter template
@@ -106,8 +113,4 @@ const CoverLetterCard = ({ coverLetter, jobId }: CoverLetterCardProps) => {
   );
 };
 
-const formatCoverLetterText = (text: string) => {
-  const coverLetterParagraphs = text.split("\n\n").map((line) => line.trim());
 
-  return coverLetterParagraphs;
-};

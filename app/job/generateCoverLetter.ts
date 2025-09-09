@@ -31,7 +31,6 @@ export const generateCoverLetter = async ({ jobId, gptModel }: GenerateCoverLett
     });
 
     const exampleCoverLetterContents = exampleCoverLetters.map((coverLetter) => coverLetter.content);
-    console.log("exampleCoverLetterContents", exampleCoverLetterContents);
 
     // create prompt
     const prompt = getPrompt({
