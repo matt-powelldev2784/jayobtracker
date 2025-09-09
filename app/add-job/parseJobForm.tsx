@@ -37,16 +37,22 @@ const ParseJobForm = () => {
   };
 
   return (
-    <section className="w-full flex flex-col items-center justify-start md:px-8">
+    <section className="w-full flex flex-col items-center justify-start md:px-8 mb-16">
       <CardWithBorder className="md:mt-8">
         <CardHeader>
           <CardTitle>Auto Fill Job Details</CardTitle>
         </CardHeader>
 
-        <CardDescription className="hidden md:block">
+        <CardDescription className="hidden md:block ">
           Copy and paste a job advert and and URL to auto-fill the job details. This leverages AI to extract key
           information from the job posting.
         </CardDescription>
+
+        <div className="w-full px-4 mt-2 md:mt-0 md:px-10 ">
+          <CardDescription className="text-xs text-muted-foreground bg-yellow-50 border border-yellow-200 rounded ">
+            It may take a minute to process the job advert depending on length and complexity.
+          </CardDescription>
+        </div>
 
         <CardContent>
           <Form {...form}>
@@ -82,12 +88,6 @@ const ParseJobForm = () => {
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? <Loader className="animate-spin" /> : "Auto Fill Job Details"}
               </Button>
-
-              {isLoading && (
-                <CardDescription className="mx-auto text-center px-4">
-                  Processing your request. This may take a moment — please wait.
-                </CardDescription>
-              )}
 
               {state?.error && <div className="text-red-500 mt-2 text-center">{state.error}</div>}
             </form>
